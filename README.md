@@ -83,6 +83,23 @@ Every studio includes an instant, synchronized code view switchable via the head
 
 ---
 
+## ⚙️ Ports & Environment Configuration
+
+All network bindings are managed through a **Single Point of Truth (`.env`)**:
+
+| Environment Variable | Default Port | Description |
+| :--- | :--- | :--- |
+| `PORT` | `3017` | Host port for the Next.js Domain-Driven Design Studio |
+
+To customize the port before starting:
+```bash
+cp .env.example .env
+# Edit PORT=3017 in .env to your desired port
+./start.sh
+```
+
+---
+
 ## 🚀 Quick Start
 
 ### Quick Start with Docker
@@ -92,7 +109,7 @@ Every studio includes an instant, synchronized code view switchable via the head
 git clone https://github.com/your-username/apex-domaindrivendesign-lab.git
 cd apex-domaindrivendesign-lab
 
-# Start containers in background daemon mode (runs on port 3017)
+# Start containers in background mode (runs on default port 3017 or $PORT)
 ./start.sh
 
 # Or start with attached live log streaming:
@@ -102,7 +119,7 @@ cd apex-domaindrivendesign-lab
 ./clear_all.sh
 ```
 
-Visit **`http://localhost:3017`** in your browser.
+Visit **`http://localhost:3017`** (or your configured `$PORT`) in your browser.
 
 ### Native Local Development (pnpm)
 
