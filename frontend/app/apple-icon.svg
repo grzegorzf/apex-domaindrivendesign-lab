@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="dddGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#c084fc" />
+    </linearGradient>
+    <radialGradient id="dddCore" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#818cf8" stop-opacity="0.2" />
+    </radialGradient>
+  </defs>
+  <!-- Bounded Context Hexagonal Ring -->
+  <polygon points="32,4 56,18 56,46 32,60 8,46 8,18" stroke="url(#dddGrad)" stroke-width="2.5" stroke-dasharray="4 2" fill="none" opacity="0.8" />
+  <!-- Aggregate Root Consistency Boundary -->
+  <circle cx="32" cy="32" r="16" stroke="url(#dddGrad)" stroke-width="2" fill="url(#dddCore)" />
+  <!-- Invariant Core Node -->
+  <circle cx="32" cy="32" r="6" fill="#38bdf8" />
+  <!-- Domain Event Vectors -->
+  <circle cx="20" cy="25" r="3" fill="#a3e635" />
+  <line x1="20" y1="25" x2="28" y2="30" stroke="#a3e635" stroke-width="1.5" stroke-linecap="round" opacity="0.7" />
+  <circle cx="44" cy="25" r="3" fill="#f43f5e" />
+  <line x1="44" y1="25" x2="36" y2="30" stroke="#f43f5e" stroke-width="1.5" stroke-linecap="round" opacity="0.7" />
+  <circle cx="32" cy="48" r="3" fill="#fbbf24" />
+  <line x1="32" y1="48" x2="32" y2="38" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" opacity="0.7" />
+</svg>

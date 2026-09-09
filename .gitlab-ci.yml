@@ -1,0 +1,31 @@
+stages:
+  - test
+  - build
+
+default:
+  image: node:22-alpine
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm@11 --activate
+    - cd frontend
+    - pnpm install --no-frozen-lockfile
+
+cache:
+  key:
+    files:
+      - frontend/package.json
+  paths:
+    - frontend/node_modules/
+    - .pnpm-store/
+
+typecheck:
+  stage: test
+  script:
+    - pnpm exec tsc --noEmit
+
+build-frontend:
+  stage: build
+  script:
+    - pnpm build
+  variables:
+    NEXT_TELEMETRY_DISABLED: "1"

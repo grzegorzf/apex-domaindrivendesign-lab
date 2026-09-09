@@ -1,0 +1,202 @@
+/* ======================================================================
+   DESIGN TOKENS — Apex Domain-Driven Design Lab
+   High-Tech CSS: @property, OKLCH, Squircles, Subgrid, Container Queries
+   ====================================================================== */
+
+@property --orbit {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@property --flow-progress {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+:root {
+  --font-heading: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+  --font-body: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.75;
+
+  --tracking-tight: -0.035em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.05em;
+  --tracking-wider: 0.12em;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+
+  --nav-height: 4.5rem;
+  --container-max: 1440px;
+
+  /* Default Midnight Tokens */
+  color-scheme: dark;
+  --bg: #06080e;
+  --bg-subtle: #0b101c;
+  --surface: #101726;
+  --surface-elevated: #162035;
+  --surface-hover: #1c2a47;
+  --border: #223354;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(56, 189, 248, 0.4);
+
+  --text: #f3f6fc;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+
+  --panel-bg: rgba(11, 16, 28, 0.88);
+  --shadow-main: 0 20px 50px rgba(0, 0, 0, 0.65);
+
+  --cyan: #38bdf8;
+  --cyan-glow: rgba(56, 189, 248, 0.18);
+  --cyan-border: rgba(56, 189, 248, 0.45);
+
+  --lime: #a3e635;
+  --lime-glow: rgba(163, 230, 53, 0.16);
+  --lime-border: rgba(163, 230, 53, 0.4);
+
+  --violet: #a855f7;
+  --violet-light: #c084fc;
+  --violet-glow: rgba(168, 85, 247, 0.16);
+
+  --amber: #fbbf24;
+  --amber-glow: rgba(251, 191, 36, 0.16);
+  --rose: #fb7185;
+  --rose-glow: rgba(251, 113, 133, 0.16);
+
+  /* OKLCH Gamut Accents */
+  --oklch-cyan: oklch(78% 0.15 220);
+  --oklch-violet: oklch(72% 0.19 300);
+  --oklch-lime: oklch(82% 0.18 135);
+  --oklch-amber: oklch(80% 0.16 80);
+}
+
+:root.theme-midnight,
+body.theme-midnight {
+  color-scheme: dark;
+  --bg: #06080e;
+  --bg-subtle: #0b101c;
+  --surface: #101726;
+  --surface-elevated: #162035;
+  --surface-hover: #1c2a47;
+  --border: #223354;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(56, 189, 248, 0.4);
+
+  --text: #f3f6fc;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+
+  --panel-bg: rgba(11, 16, 28, 0.88);
+  --shadow-main: 0 20px 50px rgba(0, 0, 0, 0.65);
+
+  --cyan: #38bdf8;
+  --cyan-glow: rgba(56, 189, 248, 0.18);
+  --cyan-border: rgba(56, 189, 248, 0.45);
+
+  --lime: #a3e635;
+  --lime-glow: rgba(163, 230, 53, 0.16);
+  --lime-border: rgba(163, 230, 53, 0.4);
+
+  --violet: #a855f7;
+  --violet-light: #c084fc;
+  --violet-glow: rgba(168, 85, 247, 0.16);
+
+  --amber: #fbbf24;
+  --amber-glow: rgba(251, 191, 36, 0.16);
+  --rose: #fb7185;
+  --rose-glow: rgba(251, 113, 133, 0.16);
+}
+
+:root.theme-daylight,
+body.theme-daylight {
+  color-scheme: light;
+  --bg: #f8fafc;
+  --bg-subtle: #f1f5f9;
+  --surface: #ffffff;
+  --surface-elevated: #ffffff;
+  --surface-hover: #f1f5f9;
+  --border: #cbd5e1;
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-accent: rgba(14, 165, 233, 0.45);
+
+  --text: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+
+  --panel-bg: rgba(255, 255, 255, 0.92);
+  --shadow-main: 0 20px 40px rgba(0, 0, 0, 0.08);
+
+  --cyan: #0284c7;
+  --cyan-glow: rgba(2, 132, 199, 0.12);
+  --cyan-border: rgba(2, 132, 199, 0.35);
+
+  --lime: #65a30d;
+  --lime-glow: rgba(101, 163, 13, 0.12);
+  --lime-border: rgba(101, 163, 13, 0.35);
+
+  --violet: #9333ea;
+  --violet-light: #7e22ce;
+  --violet-glow: rgba(147, 51, 234, 0.12);
+
+  --amber: #d97706;
+  --amber-glow: rgba(217, 119, 6, 0.12);
+  --rose: #e11d48;
+  --rose-glow: rgba(225, 29, 72, 0.12);
+}
+
+@keyframes orbitSpin {
+  0% { --orbit: 0deg; }
+  100% { --orbit: 360deg; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+
+@supports (corner-shape: squircle) {
+  .squircle-card {
+    corner-shape: squircle;
+    border-radius: var(--radius-xl);
+  }
+}
