@@ -7,15 +7,17 @@ This project is the Domain-Driven Design curriculum and interactive architecture
 ## 1. Pre-Task Checklist
 
 - [ ] **Check Environment**: Sourced from root or local `.env`. Never hardcode API keys or secrets.
-- [ ] **Ports Consistency**: Frontend Studio on `3017` (configurable via `PORT` in `.env`).
+- [ ] **Ports & Environment**: Ports are environment-provisioned (`PORT` in `.env`) with deterministic fallbacks.
 
 ---
 
-## 2. Ports & Network Summary
+## 2. Environment-Provisioned Ports & Network Summary
 
-| Service | Stack | Port |
-| :--- | :--- | :--- |
-| **frontend** | Next.js 16 App Router, React 19, TypeScript 6 | `3017` |
+All network bindings are dynamically provisioned via environment variables with fixed default fallbacks:
+
+| Service | Stack | Environment Variable | Default Fallback Port |
+| :--- | :--- | :--- | :--- |
+| **frontend** | Next.js 16 App Router, React 19, TypeScript 6 | `PORT` | `3017` |
 
 ---
 
