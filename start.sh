@@ -19,29 +19,36 @@ for arg in "$@"; do
   esac
 done
 
+# Load environment variables
+if [ -f ../.env ]; then
+  set -a
+  source ../.env
+  set +a
+fi
+
+if [ -f .env ]; then
+  set -a
+  source .env
+  set +a
+elif [ -f .env.example ]; then
+  cp .env.example .env
+  set -a
+  source .env
+  set +a
+fi
+
+PORT="${PORT:-3017}"
+
 if [ "$LOCAL_MODE" = true ]; then
-  echo "Starting Apex Domain-Driven Design Lab in local development mode (pnpm)..."
+  echo "Starting Apex Domain-Driven Design Lab in local development mode (pnpm) on port ${PORT}..."
   cd frontend
-  pnpm run dev
+  PORT="$PORT" pnpm run dev
   exit 0
 fi
 
 echo "=================================================="
 echo "🚀 Starting Apex Domain-Driven Design Lab"
 echo "=================================================="
-
-# Load environment variables
-if [ -f ../.env ]; then
-  echo "Loading root .env file..."
-  export $(grep -v '^#' ../.env | xargs -0) 2>/dev/null || true
-fi
-
-if [ -f .env ]; then
-  echo "Loading local .env file..."
-  export $(grep -v '^#' .env | xargs -0) 2>/dev/null || true
-elif [ -f .env.example ]; then
-  cp .env.example .env
-fi
 
 echo "Stopping any existing containers..."
 docker compose down --remove-orphans 2>/dev/null || true
@@ -53,7 +60,7 @@ echo ""
 echo "=================================================="
 echo "✅ Apex Domain-Driven Design Lab running in background!"
 echo "=================================================="
-echo "• Frontend Studio: http://localhost:3017"
+echo "• Frontend Studio: http://localhost:${PORT}"
 echo ""
 echo "To stream live logs:  docker compose logs -f (or ./start.sh -f)"
 echo "To run natively:      ./start.sh --local"

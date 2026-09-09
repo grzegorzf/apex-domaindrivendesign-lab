@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3017",
+    "dev": "next dev -p ${PORT:-3017}",
     "build": "next build",
     "build:pages": "STATIC_EXPORT=true next build",
-    "start": "next start -p 3017"
+    "start": "next start -p ${PORT:-3017}"
   },
   "dependencies": {
     "next": "^16.3.1",
