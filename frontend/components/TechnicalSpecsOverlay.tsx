@@ -59,10 +59,10 @@ export default function TechnicalSpecsOverlay({ isOpen, onClose }: TechnicalSpec
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <span style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text)' }}>Technical Specs</span>
-              <span className="spec-badge">PORT 3017</span>
+              <span className="badge-cyan">PORT 3017</span>
             </div>
             <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)' }}>
-              Apex Domain-Driven Design Lab · Telemetry & Standards
+              Apex Domain-Driven Design Lab · Telemetry &amp; Standards
             </p>
           </div>
           <button
@@ -84,7 +84,7 @@ export default function TechnicalSpecsOverlay({ isOpen, onClose }: TechnicalSpec
         </div>
 
         {/* Runtime & Language Telemetry */}
-        <div className="glass-panel" style={{ padding: '1rem' }}>
+        <div className="metric-card">
           <h4 style={{ fontSize: 'var(--text-xs)', textTransform: 'uppercase', color: 'var(--cyan)', marginBottom: '0.75rem' }}>
             Polyglot Execution Environment
           </h4>
@@ -92,7 +92,7 @@ export default function TechnicalSpecsOverlay({ isOpen, onClose }: TechnicalSpec
             <div>
               <span style={{ color: 'var(--text-secondary)' }}>Active Engine:</span>
               <div style={{ fontWeight: 700, color: language === 'java' ? 'var(--cyan)' : 'var(--lime)' }}>
-                {language === 'java' ? '☕ Java 26+ (Structured Concurrency)' : '🐹 Go 1.24 (Goroutines & Channels)'}
+                {language === 'java' ? '☕ Java 26+ (Virtual Threads & Records)' : '🐹 Go 1.24 (Goroutines & Channels)'}
               </div>
             </div>
             <div>
@@ -111,39 +111,39 @@ export default function TechnicalSpecsOverlay({ isOpen, onClose }: TechnicalSpec
         </div>
 
         {/* DDD Standards Matrix */}
-        <div className="glass-panel" style={{ padding: '1rem' }}>
-          <h4 style={{ fontSize: 'var(--text-xs)', textTransform: 'uppercase', color: 'var(--violet)', marginBottom: '0.75rem' }}>
+        <div className="metric-card">
+          <h4 style={{ fontSize: 'var(--text-xs)', textTransform: 'uppercase', color: 'var(--violet-light)', marginBottom: '0.75rem' }}>
             Domain-Driven Design Curriculum
           </h4>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: 'var(--text-xs)' }}>
-            <li>🎯 <strong>Ubiquitous Language:</strong> Disambiguation dictionaries & rich domain models</li>
-            <li>🗺️ <strong>Strategic Design:</strong> Core vs Supporting vs Generic subdomains & Context Mapping</li>
+            <li>🎯 <strong>Ubiquitous Language:</strong> Disambiguation dictionaries &amp; rich domain models</li>
+            <li>🗺️ <strong>Strategic Design:</strong> Core vs Supporting vs Generic subdomains &amp; Context Mapping</li>
             <li>💎 <strong>Tactical Patterns:</strong> Value Objects, Entities, Aggregates, Invariants, Events</li>
-            <li>🔄 <strong>Event Sourcing:</strong> Append-only ledgers & time-travel state reconstruction</li>
+            <li>🔄 <strong>Event Sourcing:</strong> Append-only ledgers &amp; time-travel state reconstruction</li>
             <li>🏛️ <strong>Hexagonal Architecture:</strong> Inbound/Outbound Ports, Zero-Dependency Core</li>
-            <li>⚡ <strong>Distributed Sagas:</strong> Process Managers & Compensating Rollback Transactions</li>
+            <li>⚡ <strong>Distributed Sagas:</strong> Process Managers &amp; Compensating Rollback Transactions</li>
           </ul>
         </div>
 
         {/* High-Tech Web Standards */}
-        <div className="glass-panel" style={{ padding: '1rem' }}>
+        <div className="metric-card">
           <h4 style={{ fontSize: 'var(--text-xs)', textTransform: 'uppercase', color: 'var(--lime)', marginBottom: '0.75rem' }}>
             Web Platform Capabilities (Baseline 2026)
           </h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', fontSize: 'var(--text-xs)' }}>
-            <div>✨ <strong>View Transitions API Level 2:</strong> Seamless theme & polyglot morphs</div>
+            <div>✨ <strong>View Transitions API Level 2:</strong> Seamless theme &amp; polyglot morphs</div>
             <div>🔘 <strong>Invoker Commands API:</strong> Declarative <code>commandfor</code> dialog toggles</div>
-            <div>🎨 <strong>OKLCH & Color-Mix:</strong> Perceptually uniform wide-gamut palettes</div>
+            <div>🎨 <strong>OKLCH &amp; Color-Mix:</strong> Perceptually uniform wide-gamut palettes</div>
             <div>📐 <strong>Corner-Shape Squircle:</strong> Mathematical continuous curvature</div>
             <div>📜 <strong>Scroll-Driven Animations:</strong> Real-time scroll timeline indicators</div>
-            <div>📶 <strong>BroadcastChannel:</strong> Multi-tab real-time theme & language sync</div>
+            <div>📶 <strong>BroadcastChannel:</strong> Multi-tab real-time theme &amp; language sync</div>
           </div>
         </div>
 
         {/* Accessibility & Compliance */}
-        <div className="glass-panel" style={{ padding: '1rem' }}>
-          <h4 style={{ fontSize: 'var(--text-xs)', textTransform: 'uppercase', color: 'var(--amber)', marginBottom: '0.75rem' }}>
-            Accessibility & Deployment
+        <div className="metric-card">
+          <h4 style={{ fontSize: 'var(--text-xs)', textTransform: 'uppercase', color: '#fbbf24', marginBottom: '0.75rem' }}>
+            Accessibility &amp; Deployment
           </h4>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', fontSize: 'var(--text-xs)' }}>
             <div>

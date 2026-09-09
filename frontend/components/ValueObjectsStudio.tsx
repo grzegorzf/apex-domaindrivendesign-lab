@@ -11,12 +11,13 @@ export default function ValueObjectsStudio() {
   const [currency2, setCurrency2] = useState<string>('USD')
   const [resultLog, setResultLog] = useState<string>('Ready for Value Object calculations.')
   const [hasError, setHasError] = useState<boolean>(false)
+  const [copiedCode, setCopiedCode] = useState(false)
 
   const handleAdd = () => {
     if (currency1 !== currency2) {
       setHasError(true)
       setResultLog(
-        `❌ Domain Rule Violation: Cannot add ${currency1} to ${currency2} without explicit CurrencyExchangeRate domain service! Money values are strongly typed.`
+        `❌ Domain Rule Violation: IncompatibleCurrencyException. Cannot add ${currency1} to ${currency2} without an explicit CurrencyExchangeRate domain service! Money values are strongly typed.`
       )
       return
     }
@@ -31,280 +32,346 @@ export default function ValueObjectsStudio() {
     const rawFloatSum = 0.1 + 0.2
     setHasError(false)
     setResultLog(
-      `⚠️ Primitive Obsession Bug: In raw IEEE-754 floats, 0.1 + 0.2 = ${rawFloatSum}. In DDD Money Value Object, rounding is exact (0.30 USD) using integer cents / BigDecimal!`
+      `⚠️ Primitive Obsession Bug: In raw IEEE-754 floats, 0.1 + 0.2 = ${rawFloatSum}. In DDD Money Value Object, rounding is exact (0.30 USD) using integer smallest units / BigDecimal!`
     )
   }
 
-  return (
-    <div className="studio-main">
-      <div className="studio-hero">
-        <span className="studio-level-tag level-intermediate">Level 3 · Tactical Building Blocks</span>
-        <h1 className="studio-title">Value Objects & Primitive Obsession</h1>
-        <p className="studio-lead">
-          Primitive Obsession is the most rampant code smell in modern software. Passing raw numbers and strings leaves systems vulnerable to currency mismatch and rounding bugs.
-          A <strong>Value Object</strong> is an immutable, self-validating entity defined purely by its structural attributes.
-        </p>
-      </div>
-
-      <div className="grid-3col" style={{ marginBottom: '2rem' }}>
-        <div className="glass-panel" style={{ borderTop: '3px solid var(--cyan)' }}>
-          <strong style={{ fontSize: 'var(--text-sm)', color: 'var(--cyan)' }}>1. Structural Equality</strong>
-          <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', marginTop: '0.5rem', lineHeight: 1.5 }}>
-            Two Value Objects with identical attributes are completely interchangeable. A $100 bill in your pocket equals another $100 bill; they have no persistent identity.
-          </p>
-        </div>
-
-        <div className="glass-panel" style={{ borderTop: '3px solid var(--lime)' }}>
-          <strong style={{ fontSize: 'var(--text-sm)', color: 'var(--lime)' }}>2. Absolute Immutability</strong>
-          <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', marginTop: '0.5rem', lineHeight: 1.5 }}>
-            Once instantiated, a Value Object can never change state. Adding $5 to $100 does not mutate the original $100—it returns an entirely new $105 Value Object.
-          </p>
-        </div>
-
-        <div className="glass-panel" style={{ borderTop: '3px solid var(--violet)' }}>
-          <strong style={{ fontSize: 'var(--text-sm)', color: 'var(--violet)' }}>3. Self-Validating Invariants</strong>
-          <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', marginTop: '0.5rem', lineHeight: 1.5 }}>
-            It is physically impossible to hold an invalid Value Object in memory. If an email address has no <code>@</code> sign, construction throws an error immediately.
-          </p>
-        </div>
-      </div>
-
-      {/* Interactive Money Arithmetic Simulator */}
-      <div className="grid-2col" style={{ marginBottom: '2rem' }}>
-        <div className="glass-panel">
-          <h3 style={{ fontSize: 'var(--text-sm)', color: 'var(--cyan)', textTransform: 'uppercase', marginBottom: '1rem' }}>
-            Interactive Money & Currency Simulator
-          </h3>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-            {/* Value Object 1 */}
-            <div style={{ background: 'var(--surface)', padding: '1rem', borderRadius: 'var(--radius-md)' }}>
-              <div style={{ fontSize: 'var(--text-2xs)', color: 'var(--cyan)', fontWeight: 700, marginBottom: '0.5rem' }}>
-                MONEY VALUE OBJECT 1
-              </div>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <input
-                  type="number"
-                  value={amount1}
-                  onChange={(e) => setAmount1(Number(e.target.value))}
-                  style={{
-                    width: '65%',
-                    background: 'var(--bg)',
-                    border: '1px solid var(--border)',
-                    color: 'var(--text)',
-                    padding: '0.35rem 0.5rem',
-                    borderRadius: 'var(--radius-sm)',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 'var(--text-xs)',
-                  }}
-                />
-                <select
-                  value={currency1}
-                  onChange={(e) => setCurrency1(e.target.value)}
-                  style={{
-                    width: '35%',
-                    background: 'var(--bg)',
-                    border: '1px solid var(--border)',
-                    color: 'var(--text)',
-                    padding: '0.35rem',
-                    borderRadius: 'var(--radius-sm)',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 'var(--text-xs)',
-                  }}
-                >
-                  <option value="USD">USD</option>
-                  <option value="EUR">EUR</option>
-                  <option value="GBP">GBP</option>
-                  <option value="JPY">JPY</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Value Object 2 */}
-            <div style={{ background: 'var(--surface)', padding: '1rem', borderRadius: 'var(--radius-md)' }}>
-              <div style={{ fontSize: 'var(--text-2xs)', color: 'var(--lime)', fontWeight: 700, marginBottom: '0.5rem' }}>
-                MONEY VALUE OBJECT 2
-              </div>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <input
-                  type="number"
-                  value={amount2}
-                  onChange={(e) => setAmount2(Number(e.target.value))}
-                  style={{
-                    width: '65%',
-                    background: 'var(--bg)',
-                    border: '1px solid var(--border)',
-                    color: 'var(--text)',
-                    padding: '0.35rem 0.5rem',
-                    borderRadius: 'var(--radius-sm)',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 'var(--text-xs)',
-                  }}
-                />
-                <select
-                  value={currency2}
-                  onChange={(e) => setCurrency2(e.target.value)}
-                  style={{
-                    width: '35%',
-                    background: 'var(--bg)',
-                    border: '1px solid var(--border)',
-                    color: 'var(--text)',
-                    padding: '0.35rem',
-                    borderRadius: 'var(--radius-sm)',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 'var(--text-xs)',
-                  }}
-                >
-                  <option value="USD">USD</option>
-                  <option value="EUR">EUR</option>
-                  <option value="GBP">GBP</option>
-                  <option value="JPY">JPY</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
-            <button type="button" className="btn-primary" onClick={handleAdd}>
-              Execute: a.add(b)
-            </button>
-            <button type="button" className="control-pill" onClick={handleFloatingPointComparison}>
-              Test 0.1 + 0.2 Precision Drift
-            </button>
-          </div>
-
-          <div
-            style={{
-              padding: '1rem',
-              borderRadius: 'var(--radius-sm)',
-              background: '#070b12',
-              border: `1px solid ${hasError ? 'var(--rose)' : 'var(--border)'}`,
-              fontFamily: 'var(--font-mono)',
-              fontSize: 'var(--text-xs)',
-              color: hasError ? 'var(--rose)' : 'var(--text)',
-              lineHeight: 1.5,
-            }}
-          >
-            {resultLog}
-          </div>
-        </div>
-
-        {/* Primitive Obsession vs Strongly Typed Value Objects */}
-        <div className="glass-panel">
-          <h3 style={{ fontSize: 'var(--text-sm)', color: 'var(--violet)', textTransform: 'uppercase', marginBottom: '1rem' }}>
-            Primitive Obsession vs Domain Type Safety
-          </h3>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: 'var(--text-xs)' }}>
-            <div style={{ background: 'rgba(251, 113, 133, 0.08)', padding: '0.75rem', borderRadius: 'var(--radius-sm)', borderLeft: '3px solid var(--rose)' }}>
-              <div style={{ color: 'var(--rose)', fontWeight: 700 }}>❌ Primitive Obsession (Dangerous):</div>
-              <div style={{ fontFamily: 'var(--font-mono)', marginTop: '0.25rem' }}>
-                transferFunds(String fromId, String toId, double amount, String currency)
-              </div>
-              <div style={{ color: 'var(--text-tertiary)', fontSize: 'var(--text-2xs)', marginTop: '0.25rem' }}>
-                Vulnerable to parameter transposition (accidentally swapping fromId/toId) and negative amounts.
-              </div>
-            </div>
-
-            <div style={{ background: 'rgba(56, 189, 248, 0.08)', padding: '0.75rem', borderRadius: 'var(--radius-sm)', borderLeft: '3px solid var(--cyan)' }}>
-              <div style={{ color: 'var(--cyan)', fontWeight: 700 }}>✅ Strongly Typed Value Objects (Robust):</div>
-              <div style={{ fontFamily: 'var(--font-mono)', marginTop: '0.25rem' }}>
-                transferFunds(AccountId from, AccountId to, Money amount)
-              </div>
-              <div style={{ color: 'var(--text-tertiary)', fontSize: 'var(--text-2xs)', marginTop: '0.25rem' }}>
-                Compiler forbids parameter swapping. Money self-guarantees positive amounts and structural immutability.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Polyglot Code Implementation */}
-      <div className="code-container">
-        <div className="code-header">
-          <div className="code-lang-tag">
-            {language === 'java' ? '☕ JAVA 26+ RECORD VALUE OBJECT' : '🐹 GO 1.24 IMMUTABLE VALUE STRUCT'}
-          </div>
-          <span style={{ fontSize: 'var(--text-2xs)', color: 'var(--text-secondary)' }}>
-            Compact Constructors & Currency Safety
-          </span>
-        </div>
-        <pre className="code-pre">
-          {language === 'java' ? (
-`// Java 26: Money Value Object implemented as a Record
-package com.apex.ddd.shared.domain;
+  const codeJava = `// Java 26+ Pure Value Object using Compact Record & Invariant Validation
+package com.apex.core.shared.domain;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
 import java.util.Objects;
 
-public record Money(BigDecimal amount, Currency currency) {
-    // Compact constructor enforces invariants at the moment of creation
+public record Money(BigDecimal amount, Currency currency) implements Comparable<Money> {
+
+    // Compact constructor guarding structural invariants
     public Money {
-        Objects.requireNonNull(amount, "Amount cannot be null");
-        Objects.requireNonNull(currency, "Currency cannot be null");
-        if (amount.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Money amount cannot be negative");
-        }
-        // Normalize scale to 2 decimal places to prevent rounding drift
-        amount = amount.setScale(2, RoundingMode.HALF_EVEN);
+        Objects.requireNonNull(amount, "Amount must not be null");
+        Objects.requireNonNull(currency, "Currency must not be null");
+        // Normalize to standard currency decimal scale
+        amount = amount.setScale(currency.getDefaultFractionDigits(), RoundingMode.HALF_EVEN);
     }
 
-    public static Money of(double value, String currencyCode) {
-        return new Money(BigDecimal.valueOf(value), Currency.getInstance(currencyCode));
+    public static Money of(double amount, String currencyCode) {
+        return new Money(BigDecimal.valueOf(amount), Currency.getInstance(currencyCode));
     }
 
-    // Side-Effect-Free Function: Returns a brand new Money instance
+    // Pure immutable business method: returns new instance
     public Money add(Money other) {
+        Objects.requireNonNull(other, "Cannot add null Money");
         if (!this.currency.equals(other.currency)) {
-            throw new CurrencyMismatchException(
-                "Cannot add " + other.currency + " to " + this.currency
+            throw new IncompatibleCurrencyException(
+                "Cannot add " + other.currency + " to " + this.currency + " without CurrencyExchangeService"
             );
         }
         return new Money(this.amount.add(other.amount), this.currency);
     }
+
+    public boolean isPositive() {
+        return amount.compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    @Override
+    public int compareTo(Money other) {
+        if (!this.currency.equals(other.currency)) {
+            throw new IncompatibleCurrencyException("Cannot compare different currencies");
+        }
+        return this.amount.compareTo(other.amount);
+    }
 }`
-          ) : (
-`// Go 1.24: Immutable Money Value Object using integer cents
+
+  const codeGo = `// Go 1.24 Immutable Value Object with Structural Equality
 package domain
 
 import (
 	"errors"
 	"fmt"
+	"math"
 )
 
-var ErrCurrencyMismatch = errors.New("cannot perform arithmetic across different currencies")
-
-// Money is an immutable Value Object. Amount is in cents (e.g. $10.50 -> 1050).
+// Money represents an immutable financial amount stored in integer smallest units (cents)
 type Money struct {
 	cents    int64
 	currency string
 }
 
-// NewMoney guarantees self-validation and non-negative amounts
-func NewMoney(cents int64, currency string) (Money, error) {
-	if cents < 0 {
-		return Money{}, errors.New("money cannot be negative")
+// NewMoney guards creation invariants
+func NewMoney(amount float64, currency string) (Money, error) {
+	if currency == "" {
+		return Money{}, errors.New("currency code cannot be empty")
 	}
-	if len(currency) != 3 {
-		return Money{}, errors.New("currency must be a 3-letter ISO code")
-	}
+	// Prevent IEEE-754 precision loss by converting to exact integer cents
+	cents := int64(math.Round(amount * 100))
 	return Money{cents: cents, currency: currency}, nil
 }
 
-// Add returns a brand-new Money instance with value semantics (no pointer mutation)
+// Add returns a brand new Money Value Object (Pure Functional Semantics)
 func (m Money) Add(other Money) (Money, error) {
 	if m.currency != other.currency {
-		return Money{}, fmt.Errorf("%w: %s vs %s", ErrCurrencyMismatch, m.currency, other.currency)
+		return Money{}, fmt.Errorf("currency mismatch: cannot add %s to %s", other.currency, m.currency)
 	}
 	return Money{
 		cents:    m.cents + other.cents,
 		currency: m.currency,
 	}, nil
+}
+
+func (m Money) Formatted() string {
+	return fmt.Sprintf("%.2f %s", float64(m.cents)/100.0, m.currency)
 }`
-          )}
-        </pre>
+
+  const handleCopy = () => {
+    const text = language === 'java' ? codeJava : codeGo
+    navigator.clipboard.writeText(text)
+    setCopiedCode(true)
+    setTimeout(() => setCopiedCode(false), 2000)
+  }
+
+  return (
+    <div className="tab-pane-container">
+      {/* Comprehensive Architectural & Problem-Solution Hero Card */}
+      <div className="studio-card" style={{ background: 'var(--surface-elevated)', borderLeft: '4px solid var(--cyan)', marginBottom: 'var(--space-6)' }}>
+        <div className="card-header" style={{ marginBottom: 'var(--space-3)' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+              <span className="badge-cyan">Level 3 · Tactical Building Blocks</span>
+              <span className="badge-lime">Self-Guarding Invariants</span>
+            </div>
+            <h2 className="card-title" style={{ fontSize: 'var(--text-xl)' }}>
+              Value Objects &amp; Primitive Obsession: Eliminating Type Rot &amp; Rounding Drift
+            </h2>
+          </div>
+        </div>
+
+        <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 'var(--space-4)' }}>
+          Primitive Obsession is the most pervasive anti-pattern in modern software engineering. Relying on raw primitives (<code>double</code>, <code>String</code>, <code>UUID</code>) leaves business logic exposed to silent calculation drift, currency mismatch bugs, and accidental parameter transposition. A <strong>Value Object</strong> is an immutable, self-validating entity defined purely by its structural attributes.
+        </p>
+
+        <div className="grid-2" style={{ gap: 'var(--space-4)', marginTop: 'var(--space-3)' }}>
+          {/* Problem */}
+          <div style={{ background: 'var(--bg)', padding: 'var(--space-4)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--rose)', marginBottom: 'var(--space-2)' }}>
+              ❌ The Problem: Primitive Obsession &amp; IEEE-754 Precision Drift
+            </h3>
+            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+              Developers pass around raw floats, doubles, and strings to represent complex domain quantities like prices, email addresses, and SKUs.
+            </p>
+            <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.6, marginTop: '6px' }}>
+              <strong>What breaks at enterprise scale:</strong>
+              1. <em>IEEE-754 Floating-point Drift:</em> Operations like <code>0.1 + 0.2 = 0.30000000000000004</code> create cumulative rounding errors that break financial ledger reconciliation.<br />
+              2. <em>Currency Mismatch:</em> An API receives <code>amount: 100</code> without currency context, accidentally adding 100 USD to 100 JPY (a 150x financial error).<br />
+              3. <em>Parameter Transposition:</em> A method <code>transfer(String fromId, String toId, double amount)</code> easily accepts swapped IDs without compile-time error.
+            </div>
+          </div>
+
+          {/* Solution */}
+          <div style={{ background: 'var(--bg)', padding: 'var(--space-4)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--lime)', marginBottom: 'var(--space-2)' }}>
+              💡 The Solution: Immutable, Self-Validating Value Objects
+            </h3>
+            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+              DDD models these concepts as first-class <strong>Value Objects</strong> adhering to three fundamental laws:
+            </p>
+            <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.6, marginTop: '6px' }}>
+              <strong>1. Structural Equality:</strong> Two Value Objects with identical properties are identical; they possess no arbitrary entity ID.<br />
+              <strong>2. Absolute Immutability:</strong> State can never be mutated in place. Methods like <code>money.add(other)</code> return brand-new instances, preventing concurrency race conditions.<br />
+              <strong>3. Constructor Invariant Guards:</strong> It is impossible to hold an invalid Value Object in memory. <code>Money.of(-5, "USD")</code> or adding USD to EUR throws immediately at the boundary.
+            </div>
+          </div>
+        </div>
+
+        {/* Enterprise Reality */}
+        <div style={{ marginTop: 'var(--space-4)', padding: '10px 14px', background: 'rgba(56, 189, 248, 0.05)', borderRadius: 'var(--radius-md)', border: '1px solid var(--cyan-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+          <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text)' }}>
+            🏢 <strong>Enterprise Production Reality:</strong> Stripe processes hundreds of billions of dollars annually by representing all balances as immutable integer smallest currency units (cents) wrapped in strongly typed Value Objects, preventing floating-point precision theft and currency contamination across multi-country settlements.
+          </span>
+          <span className="mono-badge" style={{ color: 'var(--cyan)' }}>Evans Ch. 5 · Value Objects</span>
+        </div>
+      </div>
+
+      {/* Value Object Three Pillars Grid */}
+      <div className="grid-3" style={{ marginBottom: 'var(--space-6)' }}>
+        <div className="metric-card" style={{ borderTop: '3px solid var(--cyan)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <span className="badge-cyan">1. STRUCTURAL EQUALITY</span>
+          </div>
+          <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+            Identical attributes define equivalence. Two $100 bills are interchangeable; they have no persistent identity.
+          </div>
+        </div>
+
+        <div className="metric-card" style={{ borderTop: '3px solid var(--lime)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <span className="badge-lime">2. ABSOLUTE IMMUTABILITY</span>
+          </div>
+          <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+            State never mutates. Operations return new instances, making Value Objects thread-safe and cache-friendly.
+          </div>
+        </div>
+
+        <div className="metric-card" style={{ borderTop: '3px solid var(--violet)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <span className="badge-violet">3. SELF-VALIDATING</span>
+          </div>
+          <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+            Guaranteed valid at construction time. Invalid states are caught at the boundary before entering the domain.
+          </div>
+        </div>
+      </div>
+
+      {/* Interactive Arithmetic Simulator Card */}
+      <div className="studio-card">
+        <div className="card-header">
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+              <h3 className="card-title">Interactive Money &amp; Currency Safety Simulator</h3>
+              <span className="live-badge"><span className="live-dot" /> Live Invariant Test</span>
+            </div>
+            <p className="card-desc">
+              Test how strongly typed Value Objects reject incompatible currency operations and eliminate floating point rounding errors.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid-2" style={{ gap: 'var(--space-6)', marginBottom: 'var(--space-6)' }}>
+          {/* Controls */}
+          <div style={{ background: 'var(--bg)', padding: 'var(--space-4)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
+              {/* VO 1 */}
+              <div style={{ background: 'var(--surface)', padding: 'var(--space-3)', borderRadius: 'var(--radius-sm)' }}>
+                <span className="metric-label" style={{ color: 'var(--cyan)' }}>Value Object 1</span>
+                <div style={{ display: 'flex', gap: '6px', marginTop: '6px' }}>
+                  <input
+                    type="number"
+                    value={amount1}
+                    onChange={(e) => setAmount1(Number(e.target.value))}
+                    style={{
+                      width: '65%',
+                      background: 'var(--bg)',
+                      border: '1px solid var(--border)',
+                      color: 'var(--text)',
+                      padding: '4px 8px',
+                      borderRadius: 'var(--radius-sm)',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: 'var(--text-xs)',
+                    }}
+                  />
+                  <select
+                    value={currency1}
+                    onChange={(e) => setCurrency1(e.target.value)}
+                    style={{
+                      background: 'var(--bg)',
+                      border: '1px solid var(--border)',
+                      color: 'var(--text)',
+                      padding: '4px',
+                      borderRadius: 'var(--radius-sm)',
+                      fontSize: 'var(--text-xs)',
+                    }}
+                  >
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* VO 2 */}
+              <div style={{ background: 'var(--surface)', padding: 'var(--space-3)', borderRadius: 'var(--radius-sm)' }}>
+                <span className="metric-label" style={{ color: 'var(--lime)' }}>Value Object 2</span>
+                <div style={{ display: 'flex', gap: '6px', marginTop: '6px' }}>
+                  <input
+                    type="number"
+                    value={amount2}
+                    onChange={(e) => setAmount2(Number(e.target.value))}
+                    style={{
+                      width: '65%',
+                      background: 'var(--bg)',
+                      border: '1px solid var(--border)',
+                      color: 'var(--text)',
+                      padding: '4px 8px',
+                      borderRadius: 'var(--radius-sm)',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: 'var(--text-xs)',
+                    }}
+                  />
+                  <select
+                    value={currency2}
+                    onChange={(e) => setCurrency2(e.target.value)}
+                    style={{
+                      background: 'var(--bg)',
+                      border: '1px solid var(--border)',
+                      color: 'var(--text)',
+                      padding: '4px',
+                      borderRadius: 'var(--radius-sm)',
+                      fontSize: 'var(--text-xs)',
+                    }}
+                  >
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                className="btn-primary"
+                onClick={handleAdd}
+              >
+                Execute Money.add()
+              </button>
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={handleFloatingPointComparison}
+              >
+                Simulate Float Drift (0.1 + 0.2)
+              </button>
+            </div>
+          </div>
+
+          {/* Output log */}
+          <div style={{ background: 'var(--bg)', padding: 'var(--space-4)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+            <span className="metric-label">Execution Result &amp; Invariant Feedback</span>
+            <div
+              style={{
+                marginTop: '10px',
+                padding: '12px',
+                borderRadius: 'var(--radius-sm)',
+                background: hasError ? 'rgba(251, 113, 133, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+                border: `1px solid ${hasError ? 'rgba(251, 113, 133, 0.4)' : 'rgba(16, 185, 129, 0.3)'}`,
+                fontSize: 'var(--text-xs)',
+                color: hasError ? 'var(--rose)' : '#10b981',
+                fontFamily: 'var(--font-mono)',
+                lineHeight: 1.5,
+              }}
+            >
+              {resultLog}
+            </div>
+          </div>
+        </div>
+
+        {/* Code Viewer */}
+        <div className="code-block">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', paddingBottom: '6px', borderBottom: '1px solid var(--border-subtle)' }}>
+            <span style={{ fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
+              {language === 'java' ? 'Java 26+ · Value Object Record with Compact Invariant Constructor' : 'Go 1.24 · Immutable Value Object Struct'}
+            </span>
+            <button
+              type="button"
+              className="control-pill"
+              onClick={handleCopy}
+              style={{ fontSize: 'var(--text-2xs)', padding: '2px 8px' }}
+            >
+              {copiedCode ? '✓ Copied' : '📋 Copy Code'}
+            </button>
+          </div>
+          <pre>{language === 'java' ? codeJava : codeGo}</pre>
+        </div>
       </div>
     </div>
   )

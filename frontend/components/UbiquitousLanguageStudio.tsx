@@ -15,17 +15,18 @@ export default function UbiquitousLanguageStudio() {
   const [auditLog, setAuditLog] = useState<string[]>([
     'System initialized with confirmed order #ORD-2027-99',
   ])
+  const [copiedCode, setCopiedCode] = useState(false)
 
   const handleApplyDiscount = () => {
     if (modelType === 'anemic') {
       setAuditLog((prev) => [
-        `⚠️ [ANEMIC MODEL] Setter applied discount ${discountInput}% directly without invariant validation. Any external service can mutate fields!`,
+        `⚠️ [ANEMIC MODEL] Setter applied discount ${discountInput}% directly without invariant validation. Any external service can mutate fields arbitrarily!`,
         ...prev,
       ])
     } else {
       if (discountInput > 50) {
         setAuditLog((prev) => [
-          `❌ [RICH MODEL ERROR] InvariantViolation: Max promotional discount capped at 50%. Attempted: ${discountInput}%. Mutation rejected by Domain Model!`,
+          `❌ [RICH MODEL ERROR] InvariantViolation: Max promotional discount is capped at 50%. Attempted: ${discountInput}%. Mutation rejected by Domain Model!`,
           ...prev,
         ])
         return
@@ -41,7 +42,7 @@ export default function UbiquitousLanguageStudio() {
     if (modelType === 'anemic') {
       setOrderStatus('Cancelled')
       setAuditLog((prev) => [
-        `⚠️ [ANEMIC MODEL] order.setStatus("Cancelled") executed regardless of shipment status. Bug: Cancelled an already shipped order!`,
+        `⚠️ [ANEMIC MODEL] order.setStatus("Cancelled") executed without invariant check. Bug: Cancelled an already shipped order!`,
         ...prev,
       ])
     } else {
@@ -60,339 +61,381 @@ export default function UbiquitousLanguageStudio() {
     }
   }
 
+  const codeJava = `// Java 26+ Rich Domain Model with Invariant Enforcement & Sealed State
+package com.apex.ddd.sales.domain;
+
+import java.math.BigDecimal;
+import java.util.Objects;
+import java.util.UUID;
+
+public class Order {
+    private final OrderId id;
+    private final CustomerId customerId;
+    private OrderStatus status;
+    private Money totalAmount;
+    private Percentage discount;
+
+    // Factory method enforcing creation invariants
+    public static Order create(CustomerId customerId, Money initialAmount) {
+        Objects.requireNonNull(customerId, "CustomerId must not be null");
+        Objects.requireNonNull(initialAmount, "Initial amount must not be null");
+        if (initialAmount.isNegativeOrZero()) {
+            throw new InvariantViolationException("Initial order value must be strictly positive");
+        }
+        return new Order(new OrderId(UUID.randomUUID()), customerId, OrderStatus.DRAFT, initialAmount, Percentage.ZERO);
+    }
+
+    // Rich business method: Invariants guarded at the boundary
+    public void applyPromotionalDiscount(Percentage promoDiscount) {
+        if (this.status != OrderStatus.DRAFT && this.status != OrderStatus.CONFIRMED) {
+            throw new IllegalDomainStateTransition("Discounts can only be applied to unfulfilled orders");
+        }
+        if (promoDiscount.isGreaterThan(Percentage.of(50))) {
+            throw new InvariantViolationException("Promotional discounts cannot exceed 50%");
+        }
+        this.discount = promoDiscount;
+        this.totalAmount = this.totalAmount.multiply(Percentage.of(100).subtract(promoDiscount));
+    }
+
+    public void cancel(CancellationReason reason) {
+        if (this.status == OrderStatus.SHIPPED) {
+            throw new IllegalDomainStateTransition("Shipped orders cannot be cancelled directly; initiate RMA");
+        }
+        this.status = OrderStatus.CANCELLED;
+    }
+}`
+
+  const codeGo = `// Go 1.24 Rich Domain Model with Encapsulated Invariants
+package domain
+
+import (
+	"errors"
+	"fmt"
+	"time"
+)
+
+type OrderStatus int
+
+const (
+	StatusDraft OrderStatus = iota
+	StatusConfirmed
+	StatusShipped
+	StatusCancelled
+)
+
+type Order struct {
+	id          string
+	customerID  string
+	status      OrderStatus
+	totalAmount float64
+	discountPct float64
+	updatedAt   time.Time
+}
+
+// NewOrder enforces creation invariants
+func NewOrder(id, customerID string, initialAmount float64) (*Order, error) {
+	if customerID == "" {
+		return nil, errors.New("customerID cannot be empty")
+	}
+	if initialAmount <= 0 {
+		return nil, errors.New("initial order amount must be positive")
+	}
+	return &Order{
+		id:          id,
+		customerID:  customerID,
+		status:      StatusDraft,
+		totalAmount: initialAmount,
+		updatedAt:   time.Now().UTC(),
+	}, nil
+}
+
+// ApplyPromotionalDiscount encapsulates business invariants
+func (o *Order) ApplyPromotionalDiscount(discountPct float64) error {
+	if o.status != StatusDraft && o.status != StatusConfirmed {
+		return errors.New("discounts only applicable before shipment")
+	}
+	if discountPct > 50.0 {
+		return fmt.Errorf("promotional discount %.1f%% exceeds 50%% ceiling", discountPct)
+	}
+	o.discountPct = discountPct
+	o.totalAmount = o.totalAmount * (1.0 - (discountPct / 100.0))
+	o.updatedAt = time.Now().UTC()
+	return nil
+}`
+
+  const handleCopy = () => {
+    const text = language === 'java' ? codeJava : codeGo
+    navigator.clipboard.writeText(text)
+    setCopiedCode(true)
+    setTimeout(() => setCopiedCode(false), 2000)
+  }
+
   return (
-    <div className="studio-main">
-      <div className="studio-hero">
-        <span className="studio-level-tag level-beginner">Level 1 · Foundations</span>
-        <h1 className="studio-title">Ubiquitous Language & Domain Modeling</h1>
-        <p className="studio-lead">
-          Domain-Driven Design begins by breaking down the linguistic barrier between business domain experts and software engineers.
-          Learn why anemic CRUD models lead to data corruption at scale and how a rigorous Ubiquitous Language anchors rich domain behavior.
-        </p>
-      </div>
-
-      {/* Spec Support & Architecture Primer */}
-      <div className="spec-box">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-          <span className="spec-badge">STRATEGIC PRINCIPLE</span>
-          <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700 }}>Single Vocabulary per Bounded Context</span>
-        </div>
-        <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-          In traditional architectures, the noun <em>"Order"</em> is stuffed into a massive database table with 100+ columns serving every department. In DDD, language is context-bound. An <strong>Order</strong> in Sales represents an agreed intent to purchase; in Fulfillment it represents physical items in warehouse bins; in Billing it is an invoice with tax line items.
-        </p>
-      </div>
-
-      <div className="grid-2col" style={{ marginBottom: '2rem' }}>
-        {/* Interactive Linguistic Disambiguation */}
-        <div className="glass-panel">
-          <h3 style={{ fontSize: 'var(--text-sm)', color: 'var(--cyan)', textTransform: 'uppercase', marginBottom: '1rem' }}>
-            1. Ubiquitous Language Disambiguation Explorer
-          </h3>
-          <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
-            Select a domain term to observe how its definition, invariants, and ubiquitous vocabulary mutate across Bounded Contexts:
-          </p>
-
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem' }}>
-            {(['Order', 'Customer', 'Product'] as DomainTerm[]).map((term) => (
-              <button
-                key={term}
-                type="button"
-                className={`control-pill ${selectedTerm === term ? 'active-lang' : ''}`}
-                onClick={() => setSelectedTerm(term)}
-              >
-                {term}
-              </button>
-            ))}
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {selectedTerm === 'Order' && (
-              <>
-                <div style={{ background: 'var(--surface)', padding: '1rem', borderRadius: 'var(--radius-md)', borderLeft: '3px solid var(--cyan)' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                    <strong style={{ fontSize: 'var(--text-xs)', color: 'var(--cyan)' }}>Sales & Checkout Context</strong>
-                    <span style={{ fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)' }}>Bounded Context A</span>
-                  </div>
-                  <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)' }}>
-                    <strong>Language:</strong> <em>Shopping Cart, Line Item, Discount Code, Checkout Intent, Quoted Price.</em>
-                  </p>
-                  <p style={{ fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>
-                    Invariant: Quoted price cannot expire during checkout session.
-                  </p>
-                </div>
-
-                <div style={{ background: 'var(--surface)', padding: '1rem', borderRadius: 'var(--radius-md)', borderLeft: '3px solid var(--lime)' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                    <strong style={{ fontSize: 'var(--text-xs)', color: 'var(--lime)' }}>Warehouse & Logistics Context</strong>
-                    <span style={{ fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)' }}>Bounded Context B</span>
-                  </div>
-                  <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)' }}>
-                    <strong>Language:</strong> <em>Picking Slip, SKU Allocation, Bin Location, Dimension Matrix, Manifest.</em>
-                  </p>
-                  <p style={{ fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>
-                    Invariant: Total box gross weight cannot exceed carrier conveyor limit (30kg).
-                  </p>
-                </div>
-
-                <div style={{ background: 'var(--surface)', padding: '1rem', borderRadius: 'var(--radius-md)', borderLeft: '3px solid var(--violet)' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                    <strong style={{ fontSize: 'var(--text-xs)', color: 'var(--violet)' }}>Invoicing & Accounting Context</strong>
-                    <span style={{ fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)' }}>Bounded Context C</span>
-                  </div>
-                  <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)' }}>
-                    <strong>Language:</strong> <em>Accounts Receivable, Tax Nexus, VAT Breakdown, General Ledger Entry, Fiscal Debit.</em>
-                  </p>
-                  <p style={{ fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>
-                    Invariant: Debits must balance credits with zero rounding drift.
-                  </p>
-                </div>
-              </>
-            )}
-
-            {selectedTerm === 'Customer' && (
-              <>
-                <div style={{ background: 'var(--surface)', padding: '1rem', borderRadius: 'var(--radius-md)', borderLeft: '3px solid var(--cyan)' }}>
-                  <strong style={{ fontSize: 'var(--text-xs)', color: 'var(--cyan)' }}>Identity & Access Context:</strong>
-                  <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                    Called <strong>Subject</strong> or <strong>User Account</strong>. Owns credentials, MFA tokens, and OAuth scopes.
-                  </p>
-                </div>
-                <div style={{ background: 'var(--surface)', padding: '1rem', borderRadius: 'var(--radius-md)', borderLeft: '3px solid var(--amber)' }}>
-                  <strong style={{ fontSize: 'var(--text-xs)', color: 'var(--amber)' }}>Marketing & CRM Context:</strong>
-                  <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                    Called <strong>Lead</strong> or <strong>Prospect</strong>. Tracks engagement scores, churn propensity, and campaign touchpoints.
-                  </p>
-                </div>
-              </>
-            )}
-
-            {selectedTerm === 'Product' && (
-              <>
-                <div style={{ background: 'var(--surface)', padding: '1rem', borderRadius: 'var(--radius-md)', borderLeft: '3px solid var(--cyan)' }}>
-                  <strong style={{ fontSize: 'var(--text-xs)', color: 'var(--cyan)' }}>E-Commerce Catalog Context:</strong>
-                  <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                    Called <strong>Merchandise Display</strong>. Owns high-res galleries, localized descriptions, and SEO tags.
-                  </p>
-                </div>
-                <div style={{ background: 'var(--surface)', padding: '1rem', borderRadius: 'var(--radius-md)', borderLeft: '3px solid var(--lime)' }}>
-                  <strong style={{ fontSize: 'var(--text-xs)', color: 'var(--lime)' }}>Fulfillment Context:</strong>
-                  <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                    Called <strong>Stock Keeping Unit (SKU)</strong>. Owns hazardous material classifications, shelf life, and pallet coordinates.
-                  </p>
-                </div>
-              </>
-            )}
+    <div className="tab-pane-container">
+      {/* Comprehensive Architectural & Problem-Solution Hero Card */}
+      <div className="studio-card" style={{ background: 'var(--surface-elevated)', borderLeft: '4px solid var(--cyan)', marginBottom: 'var(--space-6)' }}>
+        <div className="card-header" style={{ marginBottom: 'var(--space-3)' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+              <span className="badge-cyan">Level 1 · Strategic Foundations</span>
+              <span className="badge-lime">Eric Evans Canonical DDD</span>
+            </div>
+            <h2 className="card-title" style={{ fontSize: 'var(--text-xl)' }}>
+              Ubiquitous Language &amp; Domain Modeling: Eliminating Conceptual Dissonance
+            </h2>
           </div>
         </div>
 
-        {/* Anemic vs Rich Domain Model Interactive Sandbox */}
-        <div className="glass-panel">
-          <h3 style={{ fontSize: 'var(--text-sm)', color: 'var(--violet)', textTransform: 'uppercase', marginBottom: '1rem' }}>
-            2. Anemic vs Rich Domain Model Sandbox
-          </h3>
+        <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 'var(--space-4)' }}>
+          Domain-Driven Design begins by dismantling the linguistic divide between business domain experts and software developers.
+          A Ubiquitous Language is not merely a glossary—it is a formal, shared conceptual model embedded directly into code artifacts (classes, records, methods, and domain events) without translation layers.
+        </p>
 
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem' }}>
-            <button
-              type="button"
-              className={`control-pill ${modelType === 'rich' ? 'active-lang' : ''}`}
-              onClick={() => setModelType('rich')}
-            >
-              🛡️ Rich Domain Model (DDD)
-            </button>
-            <button
-              type="button"
-              className={`control-pill ${modelType === 'anemic' ? 'active-lang' : ''}`}
-              onClick={() => setModelType('anemic')}
-            >
-              ⚠️ Anemic Model (Anti-Pattern)
-            </button>
+        <div className="grid-2" style={{ gap: 'var(--space-4)', marginTop: 'var(--space-3)' }}>
+          {/* Problem */}
+          <div style={{ background: 'var(--bg)', padding: 'var(--space-4)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--rose)', marginBottom: 'var(--space-2)' }}>
+              ❌ The Problem: The Anemic Domain Model &amp; Universal Word Anti-Pattern
+            </h3>
+            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+              In traditional architectures, teams attempt to build a single "Universal Enterprise Entity" (such as a 120-column SQL table for <code>Order</code>) shared across Sales, Fulfillment, Billing, and Returns.
+            </p>
+            <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.6, marginTop: '6px' }}>
+              <strong>What breaks at enterprise scale:</strong>
+              Domain objects are reduced to "anemic data bags" with public getters and setters (<code>order.setStatus("Cancelled")</code>). Business invariants are scattered across hundreds of procedural service classes. Any developer or script can bypass validation, mutate state illegally (e.g., cancelling an order that was already placed on a FedEx delivery plane), and create silent database corruption.
+            </div>
           </div>
 
-          <div style={{ background: 'var(--surface)', padding: '1rem', borderRadius: 'var(--radius-md)', marginBottom: '1rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-xs)', marginBottom: '0.5rem' }}>
-              <span>Order State: <strong style={{ color: orderStatus === 'Shipped' ? 'var(--lime)' : 'var(--amber)' }}>{orderStatus}</strong></span>
-              <span>Model Mode: <strong style={{ color: modelType === 'rich' ? 'var(--cyan)' : 'var(--rose)' }}>{modelType.toUpperCase()}</strong></span>
+          {/* Solution */}
+          <div style={{ background: 'var(--bg)', padding: 'var(--space-4)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--lime)', marginBottom: 'var(--space-2)' }}>
+              💡 The Solution: Bounded Ubiquitous Language &amp; Rich Self-Guarding Models
+            </h3>
+            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+              DDD segregates the enterprise into discrete <strong>Bounded Contexts</strong>, each owning a focused, unambiguous vocabulary.
+            </p>
+            <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.6, marginTop: '6px' }}>
+              <strong>Linguistic Precision &amp; Behavioral Encapsulation:</strong>
+              An "Order" in Sales models checkout intent and discount thresholds; in Warehouse it models picking manifests and pallet weight; in Billing it models accounts receivable. Furthermore, entities are implemented as <strong>Rich Domain Models</strong> that protect their own invariants: state changes only occur through expressive domain methods (<code>order.applyPromotionalDiscount(promo)</code>) that reject illegal transitions at compile and runtime.
+            </div>
+          </div>
+        </div>
+
+        {/* Enterprise Reality */}
+        <div style={{ marginTop: 'var(--space-4)', padding: '10px 14px', background: 'rgba(56, 189, 248, 0.05)', borderRadius: 'var(--radius-md)', border: '1px solid var(--cyan-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+          <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text)' }}>
+            🏢 <strong>Enterprise Production Reality:</strong> Amazon uncoupled their single shared monolithic database into contextual service boundaries when an "Item" had 40 conflicting definitions across consumer retail, Amazon Web Services billing, and Kiva robotics fulfillment centers. Shopify refactored their 15-year-old monolithic Rails core into strict Packwerk-enforced modular domain boundaries.
+          </span>
+          <span className="mono-badge" style={{ color: 'var(--cyan)' }}>Evans Ch. 2 · Ubiquitous Language</span>
+        </div>
+      </div>
+
+      {/* Interactive Playground & Code Viewer Card */}
+      <div className="studio-card">
+        <div className="card-header">
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+              <h3 className="card-title">Interactive Linguistic Disambiguation &amp; Invariant Sandbox</h3>
+              <span className="live-badge"><span className="live-dot" /> Live Simulation</span>
+            </div>
+            <p className="card-desc">
+              Test how business terms shift invariants between Bounded Contexts, and compare anemic data bags against rich self-guarding domain models.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid-2" style={{ gap: 'var(--space-6)', marginBottom: 'var(--space-6)' }}>
+          {/* Panel 1: Linguistic Disambiguation */}
+          <div style={{ background: 'var(--bg)', padding: 'var(--space-4)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-3)' }}>
+              <strong style={{ fontSize: 'var(--text-xs)', textTransform: 'uppercase', color: 'var(--cyan)' }}>
+                1. Select Domain Concept
+              </strong>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                {(['Order', 'Customer', 'Product'] as DomainTerm[]).map((term) => (
+                  <button
+                    key={term}
+                    type="button"
+                    className={`control-pill ${selectedTerm === term ? 'active-lang' : ''}`}
+                    onClick={() => setSelectedTerm(term)}
+                  >
+                    {term}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '1rem' }}>
-              <label style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)' }}>Discount %:</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+              {selectedTerm === 'Order' && (
+                <>
+                  <div style={{ background: 'var(--surface)', padding: 'var(--space-3)', borderRadius: 'var(--radius-sm)', borderLeft: '3px solid var(--cyan)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                      <strong style={{ fontSize: 'var(--text-xs)', color: 'var(--cyan)' }}>Sales &amp; Checkout Context</strong>
+                      <span className="mono-badge">Bounded Context A</span>
+                    </div>
+                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)' }}>
+                      <strong>Language:</strong> <em>Shopping Cart, Line Item, Discount Code, Checkout Intent, Quoted Price.</em>
+                    </p>
+                    <p style={{ fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)', marginTop: '4px' }}>
+                      ⚡ Invariant: Quoted price cannot expire during active checkout session.
+                    </p>
+                  </div>
+
+                  <div style={{ background: 'var(--surface)', padding: 'var(--space-3)', borderRadius: 'var(--radius-sm)', borderLeft: '3px solid var(--lime)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                      <strong style={{ fontSize: 'var(--text-xs)', color: 'var(--lime)' }}>Warehouse &amp; Logistics Context</strong>
+                      <span className="mono-badge">Bounded Context B</span>
+                    </div>
+                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)' }}>
+                      <strong>Language:</strong> <em>Picking Slip, SKU Allocation, Bin Location, Weight Matrix, Manifest.</em>
+                    </p>
+                    <p style={{ fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)', marginTop: '4px' }}>
+                      ⚡ Invariant: Total carton weight cannot exceed conveyor limit (30kg).
+                    </p>
+                  </div>
+
+                  <div style={{ background: 'var(--surface)', padding: 'var(--space-3)', borderRadius: 'var(--radius-sm)', borderLeft: '3px solid var(--violet)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                      <strong style={{ fontSize: 'var(--text-xs)', color: 'var(--violet)' }}>Invoicing &amp; Accounting Context</strong>
+                      <span className="mono-badge">Bounded Context C</span>
+                    </div>
+                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)' }}>
+                      <strong>Language:</strong> <em>Accounts Receivable, Tax Nexus, VAT Breakdown, General Ledger Entry.</em>
+                    </p>
+                    <p style={{ fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)', marginTop: '4px' }}>
+                      ⚡ Invariant: Debits must balance credits with zero rounding drift.
+                    </p>
+                  </div>
+                </>
+              )}
+
+              {selectedTerm === 'Customer' && (
+                <>
+                  <div style={{ background: 'var(--surface)', padding: 'var(--space-3)', borderRadius: 'var(--radius-sm)', borderLeft: '3px solid var(--cyan)' }}>
+                    <strong style={{ fontSize: 'var(--text-xs)', color: 'var(--cyan)' }}>Identity &amp; Access Context:</strong>
+                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                      Called <strong>Subject</strong> or <strong>User Account</strong>. Owns credentials, MFA tokens, and OAuth scopes.
+                    </p>
+                  </div>
+                  <div style={{ background: 'var(--surface)', padding: 'var(--space-3)', borderRadius: 'var(--radius-sm)', borderLeft: '3px solid var(--amber)' }}>
+                    <strong style={{ fontSize: 'var(--text-xs)', color: '#fbbf24' }}>Marketing &amp; CRM Context:</strong>
+                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                      Called <strong>Lead</strong> or <strong>Prospect</strong>. Tracks engagement scores, churn propensity, and campaign touchpoints.
+                    </p>
+                  </div>
+                </>
+              )}
+
+              {selectedTerm === 'Product' && (
+                <>
+                  <div style={{ background: 'var(--surface)', padding: 'var(--space-3)', borderRadius: 'var(--radius-sm)', borderLeft: '3px solid var(--cyan)' }}>
+                    <strong style={{ fontSize: 'var(--text-xs)', color: 'var(--cyan)' }}>E-Commerce Catalog Context:</strong>
+                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                      Called <strong>Merchandise Display</strong>. Owns high-res media, localized copy, and SEO meta tags.
+                    </p>
+                  </div>
+                  <div style={{ background: 'var(--surface)', padding: 'var(--space-3)', borderRadius: 'var(--radius-sm)', borderLeft: '3px solid var(--lime)' }}>
+                    <strong style={{ fontSize: 'var(--text-xs)', color: 'var(--lime)' }}>Fulfillment Context:</strong>
+                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                      Called <strong>Stock Keeping Unit (SKU)</strong>. Owns hazard codes, shelf-life dates, and warehouse slot coords.
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Panel 2: Invariant Sandbox */}
+          <div style={{ background: 'var(--bg)', padding: 'var(--space-4)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-3)' }}>
+              <strong style={{ fontSize: 'var(--text-xs)', textTransform: 'uppercase', color: 'var(--violet)' }}>
+                2. Invariant Guard Sandbox
+              </strong>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                <button
+                  type="button"
+                  className={`control-pill ${modelType === 'rich' ? 'active-lang' : ''}`}
+                  onClick={() => setModelType('rich')}
+                >
+                  🛡️ Rich Model (DDD)
+                </button>
+                <button
+                  type="button"
+                  className={`control-pill ${modelType === 'anemic' ? 'active-lang' : ''}`}
+                  onClick={() => setModelType('anemic')}
+                >
+                  ⚠️ Anemic CRUD
+                </button>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: 'var(--space-3)', fontSize: 'var(--text-xs)' }}>
+              Order State: <span className="mono-badge" style={{ color: orderStatus === 'Shipped' ? 'var(--lime)' : orderStatus === 'Cancelled' ? 'var(--rose)' : 'var(--cyan)' }}>{orderStatus}</span>
+            </div>
+
+            <div style={{ display: 'flex', gap: '8px', marginBottom: 'var(--space-4)' }}>
               <input
                 type="number"
                 value={discountInput}
                 onChange={(e) => setDiscountInput(Number(e.target.value))}
                 style={{
-                  background: 'var(--bg)',
+                  background: 'var(--surface)',
                   border: '1px solid var(--border)',
                   color: 'var(--text)',
-                  padding: '0.35rem 0.6rem',
+                  padding: '6px 10px',
                   borderRadius: 'var(--radius-sm)',
-                  width: '80px',
+                  width: '90px',
                   fontFamily: 'var(--font-mono)',
                   fontSize: 'var(--text-xs)',
                 }}
               />
-              <button type="button" className="btn-primary" onClick={handleApplyDiscount} style={{ fontSize: 'var(--text-2xs)' }}>
-                Apply Discount
-              </button>
-            </div>
-
-            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
               <button
                 type="button"
-                className="control-pill"
-                onClick={() => setOrderStatus('Shipped')}
-                style={{ fontSize: 'var(--text-2xs)' }}
+                className="btn-primary"
+                onClick={handleApplyDiscount}
               >
-                Simulate: Mark Shipped
+                Apply Discount (%)
               </button>
               <button
                 type="button"
-                className="control-pill"
+                className="btn-secondary"
                 onClick={handleCancelOrder}
-                style={{ fontSize: 'var(--text-2xs)', borderColor: 'var(--rose)', color: 'var(--rose)' }}
+                style={{ color: 'var(--rose)' }}
               >
-                Simulate: Cancel Order
+                Cancel Order
               </button>
             </div>
-          </div>
 
-          {/* Audit Stream */}
-          <div>
-            <span style={{ fontSize: 'var(--text-2xs)', textTransform: 'uppercase', color: 'var(--text-tertiary)' }}>
-              Domain Audit & Invariant Log
-            </span>
-            <div
-              style={{
-                background: '#090d16',
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius-sm)',
-                padding: '0.75rem',
-                maxHeight: '140px',
-                overflowY: 'auto',
-                fontFamily: 'var(--font-mono)',
-                fontSize: 'var(--text-2xs)',
-                lineHeight: 1.5,
-                marginTop: '0.25rem',
-              }}
-            >
-              {auditLog.map((log, i) => (
-                <div key={i} style={{ color: log.startsWith('❌') ? 'var(--rose)' : log.startsWith('⚠️') ? 'var(--amber)' : '#94a3b8' }}>
+            <div style={{ maxHeight: '160px', overflowY: 'auto', background: '#05070a', padding: '10px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
+              <div style={{ fontSize: 'var(--text-2xs)', fontFamily: 'var(--font-mono)', color: 'var(--text-tertiary)', marginBottom: '4px' }}>
+                DOMAIN AUDIT LOG
+              </div>
+              {auditLog.map((log, idx) => (
+                <div key={idx} style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: log.startsWith('❌') ? 'var(--rose)' : log.startsWith('⚠️') ? '#fbbf24' : '#10b981', marginBottom: '4px' }}>
                   {log}
                 </div>
               ))}
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Polyglot Code Implementation */}
-      <div className="code-container">
-        <div className="code-header">
-          <div className="code-lang-tag">
-            {language === 'java' ? '☕ JAVA 26+ RECORD & RICH AGGREGATE' : '🐹 GO 1.24 RICH DOMAIN STRUCT'}
+        {/* Polyglot Code Viewer */}
+        <div className="code-block">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', paddingBottom: '6px', borderBottom: '1px solid var(--border-subtle)' }}>
+            <span style={{ fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
+              {language === 'java' ? 'Java 26+ · Rich Invariant Domain Model' : 'Go 1.24 · Encapsulated Invariant Domain Model'}
+            </span>
+            <button
+              type="button"
+              className="control-pill"
+              onClick={handleCopy}
+              style={{ fontSize: 'var(--text-2xs)', padding: '2px 8px' }}
+            >
+              {copiedCode ? '✓ Copied' : '📋 Copy Code'}
+            </button>
           </div>
-          <span style={{ fontSize: 'var(--text-2xs)', color: 'var(--text-secondary)' }}>
-            Encapsulating Invariants & Ubiquitous Language
-          </span>
+          <pre>{language === 'java' ? codeJava : codeGo}</pre>
         </div>
-        <pre className="code-pre">
-          {language === 'java' ? (
-`// Java 26: Rich Domain Model with Self-Guarding Invariants & Value Objects
-package com.apex.ddd.sales.domain;
-
-import java.math.BigDecimal;
-import java.util.Objects;
-
-public final class Order {
-    private final OrderId id;
-    private OrderStatus status;
-    private Money totalAmount;
-    private final List<OrderLine> lines = new ArrayList<>();
-
-    // Private constructor: Invariants enforced via intention-revealing factory methods
-    private Order(OrderId id, Money initialAmount) {
-        this.id = Objects.requireNonNull(id, "OrderId cannot be null");
-        this.totalAmount = Objects.requireNonNull(initialAmount, "Initial amount required");
-        this.status = OrderStatus.CONFIRMED;
-    }
-
-    public static Order create(OrderId id, Money amount) {
-        if (amount.isNegativeOrZero()) {
-            throw new InvalidDomainStateException("Initial order amount must be positive");
-        }
-        return new Order(id, amount);
-    }
-
-    // Ubiquitous Language Method: Intention-revealing, guards business invariants
-    public void applyPromotionalDiscount(Percentage discount) {
-        if (discount.isGreaterThan(Percentage.of(50))) {
-            throw new PromotionalDiscountExceededException("Promotional discount cannot exceed 50%");
-        }
-        this.totalAmount = this.totalAmount.subtract(this.totalAmount.percentage(discount));
-    }
-
-    public void cancel(CancellationReason reason) {
-        // Business Rule: Shipped orders cannot be cancelled directly
-        if (this.status == OrderStatus.SHIPPED) {
-            throw new IllegalDomainStateTransitionException("Cannot cancel an order that has already shipped");
-        }
-        this.status = OrderStatus.CANCELLED;
-    }
-}`
-          ) : (
-`// Go 1.24: Rich Domain Struct with Unexported Fields & Invariant Protection
-package domain
-
-import (
-	"errors"
-	"fmt"
-)
-
-var (
-	ErrDiscountTooHigh     = errors.New("domain: promotional discount cannot exceed 50%")
-	ErrCannotCancelShipped = errors.New("domain: shipped order cannot be cancelled")
-)
-
-// Order has unexported fields to prevent external packages from mutating internal state
-type Order struct {
-	id          OrderID
-	status      OrderStatus
-	totalAmount Money
-	lines       []OrderLine
-}
-
-// NewOrder is the factory enforcing creation invariants
-func NewOrder(id OrderID, initialAmount Money) (*Order, error) {
-	if initialAmount.Amount <= 0 {
-		return nil, errors.New("initial order amount must be positive")
-	}
-	return &Order{
-		id:          id,
-		status:      StatusConfirmed,
-		totalAmount: initialAmount,
-		lines:       make([]OrderLine, 0),
-	}, nil
-}
-
-// ApplyPromotionalDiscount reveals business intention and validates invariants
-func (o *Order) ApplyPromotionalDiscount(pct float64) error {
-	if pct > 50.0 {
-		return fmt.Errorf("%w: requested %.1f%%", ErrDiscountTooHigh, pct)
-	}
-	o.totalAmount = o.totalAmount.SubtractPercent(pct)
-	return nil
-}
-
-// Cancel transitions order state safely according to ubiquitous business rules
-func (o *Order) Cancel(reason string) error {
-	if o.status == StatusShipped {
-		return ErrCannotCancelShipped
-	}
-	o.status = StatusCancelled
-	return nil
-}`
-          )}
-        </pre>
       </div>
     </div>
   )

@@ -103,19 +103,18 @@ export default function DomainDrivenDesignLabPage() {
   }
 
   return (
-    <>
-      <div className="scroll-progress-bar" />
-
-      {/* Primary Sticky Header */}
-      <header className="top-nav">
-        <div className="nav-content">
-          <div className="brand-wrapper">
-            <div className="brand-icon-box">
-              <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
-                <polygon points="32,4 56,18 56,46 32,60 8,46 8,18" stroke="#38bdf8" strokeWidth="3" strokeDasharray="4 2" />
-                <circle cx="32" cy="32" r="14" stroke="#818cf8" strokeWidth="2" fill="rgba(56, 189, 248, 0.2)" />
-                <circle cx="32" cy="32" r="5" fill="#38bdf8" />
-              </svg>
+    <div className="app-container">
+      {/* Sticky Site Navigation Header */}
+      <header className="site-nav">
+        <div className="site-nav-inner">
+          {/* Brand Group */}
+          <div
+            className="brand-badge"
+            onClick={() => switchTab('ubiquitous')}
+            style={{ cursor: 'pointer' }}
+          >
+            <div className="brand-monogram" aria-hidden="true">
+              DDD
             </div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
@@ -125,14 +124,14 @@ export default function DomainDrivenDesignLabPage() {
                 </span>
               </div>
               <div className="brand-subtitle">
-                Enterprise Strategic & Tactical Patterns · Java 26+ & Go 1.24
+                Enterprise Strategic &amp; Tactical Patterns · Polyglot Engine · 2027
               </div>
             </div>
           </div>
 
-          {/* Action Controls */}
+          {/* Header Action Controls */}
           <div className="nav-actions">
-            {/* Java 26 / Go 1.24 Language Switcher */}
+            {/* Global Language Switcher (Java 26 vs Go 1.24) */}
             <div
               style={{
                 display: 'inline-flex',
@@ -168,12 +167,12 @@ export default function DomainDrivenDesignLabPage() {
               type="button"
               className="control-pill"
               onClick={toggleTheme}
-              title="Toggle theme (Midnight / Daylight)"
+              title="Switch between Midnight and Daylight themes"
             >
               <span>{theme === 'midnight' ? '🌙 Midnight' : '☀️ Daylight'}</span>
             </button>
 
-            {/* Technical Specs Overlay Trigger */}
+            {/* Technical Specs Trigger */}
             <button
               type="button"
               className="btn-primary"
@@ -186,14 +185,15 @@ export default function DomainDrivenDesignLabPage() {
         </div>
       </header>
 
-      {/* Horizontal Sub-Navigation Tab Bar */}
+      {/* Navigation Tabs Sub-Bar with desktop wheel + chevron + touch scrolling */}
       <div className="nav-container">
         {canScrollLeft && (
           <button
             type="button"
             className="nav-scroll-btn"
             onClick={() => scrollNav('left')}
-            aria-label="Scroll left"
+            aria-label="Scroll navigation left"
+            title="Scroll left"
           >
             ‹
           </button>
@@ -206,76 +206,77 @@ export default function DomainDrivenDesignLabPage() {
           onMouseMove={onMouseMove}
           onMouseUp={onMouseUpOrLeave}
           onMouseLeave={onMouseUpOrLeave}
+          aria-label="Domain-Driven Design Lab Navigation"
         >
           <button
             type="button"
-            className={`nav-tab-btn ${activeTab === 'ubiquitous' ? 'active' : ''}`}
+            className={`nav-tab ${activeTab === 'ubiquitous' ? 'active' : ''}`}
             onClick={() => switchTab('ubiquitous')}
           >
-            <span>💬</span> Ubiquitous Language
+            💬 Ubiquitous Language
           </button>
           <button
             type="button"
-            className={`nav-tab-btn ${activeTab === 'subdomains' ? 'active' : ''}`}
+            className={`nav-tab ${activeTab === 'subdomains' ? 'active' : ''}`}
             onClick={() => switchTab('subdomains')}
           >
-            <span>🎯</span> Strategic Subdomains
+            🎯 Strategic Subdomains
           </button>
           <button
             type="button"
-            className={`nav-tab-btn ${activeTab === 'context-mapping' ? 'active' : ''}`}
+            className={`nav-tab ${activeTab === 'context-mapping' ? 'active' : ''}`}
             onClick={() => switchTab('context-mapping')}
           >
-            <span>🗺️</span> Context Mapping (ACL)
+            🗺️ Context Mapping (ACL)
           </button>
           <button
             type="button"
-            className={`nav-tab-btn ${activeTab === 'value-objects' ? 'active' : ''}`}
+            className={`nav-tab ${activeTab === 'value-objects' ? 'active' : ''}`}
             onClick={() => switchTab('value-objects')}
           >
-            <span>💎</span> Value Objects
+            💎 Value Objects
           </button>
           <button
             type="button"
-            className={`nav-tab-btn ${activeTab === 'aggregates' ? 'active' : ''}`}
+            className={`nav-tab ${activeTab === 'aggregates' ? 'active' : ''}`}
             onClick={() => switchTab('aggregates')}
           >
-            <span>🛡️</span> Aggregates & Invariants
+            🛡️ Aggregates &amp; Invariants
           </button>
           <button
             type="button"
-            className={`nav-tab-btn ${activeTab === 'domain-events' ? 'active' : ''}`}
+            className={`nav-tab ${activeTab === 'domain-events' ? 'active' : ''}`}
             onClick={() => switchTab('domain-events')}
           >
-            <span>🔄</span> Events & Sourcing
+            🔄 Events &amp; Sourcing
           </button>
           <button
             type="button"
-            className={`nav-tab-btn ${activeTab === 'domain-services' ? 'active' : ''}`}
+            className={`nav-tab ${activeTab === 'domain-services' ? 'active' : ''}`}
             onClick={() => switchTab('domain-services')}
           >
-            <span>⚙️</span> Domain Services
+            ⚙️ Domain Services
           </button>
           <button
             type="button"
-            className={`nav-tab-btn ${activeTab === 'hexagonal' ? 'active' : ''}`}
+            className={`nav-tab ${activeTab === 'hexagonal' ? 'active' : ''}`}
             onClick={() => switchTab('hexagonal')}
           >
-            <span>🏛️</span> Hexagonal Ports
+            🏛️ Hexagonal Architecture
           </button>
           <button
             type="button"
-            className={`nav-tab-btn ${activeTab === 'sagas' ? 'active' : ''}`}
+            className={`nav-tab ${activeTab === 'sagas' ? 'active' : ''}`}
             onClick={() => switchTab('sagas')}
           >
-            <span>⚡</span> Distributed Sagas
+            ⚡ Distributed Sagas
           </button>
           <button
             type="button"
-            className={`nav-tab-btn ${activeTab === 'blueprint' ? 'active' : ''}`}
+            className={`nav-tab ${activeTab === 'blueprint' ? 'active' : ''}`}
             onClick={() => switchTab('blueprint')}
           >
-            <span>🧭</span> Master Blueprint
+            🧭 Master Blueprint
           </button>
         </nav>
         {canScrollRight && (
@@ -283,15 +284,16 @@ export default function DomainDrivenDesignLabPage() {
             type="button"
             className="nav-scroll-btn"
             onClick={() => scrollNav('right')}
-            aria-label="Scroll right"
+            aria-label="Scroll navigation right"
+            title="Scroll right"
           >
             ›
           </button>
         )}
       </div>
 
-      {/* Active Studio View */}
-      <main>
+      {/* Main Content & Studio Viewport */}
+      <main className="main-content">
         {activeTab === 'ubiquitous' && <UbiquitousLanguageStudio />}
         {activeTab === 'subdomains' && <StrategicSubdomainsStudio />}
         {activeTab === 'context-mapping' && <ContextMappingStudio />}
@@ -304,7 +306,19 @@ export default function DomainDrivenDesignLabPage() {
         {activeTab === 'blueprint' && <DddCurriculumBlueprint />}
       </main>
 
+      {/* Site Footer */}
+      <footer className="site-footer">
+        <div className="site-footer-inner">
+          <div>
+            <strong>Apex Domain-Driven Design Lab</strong> · Baseline 2026 Enterprise Polyglot Systems · MIT Open Source
+          </div>
+          <div style={{ opacity: 0.8 }}>
+            Polyglot Domain Core: Java 26+ (Records, Sealed Hierarchies, Virtual Threads) &amp; Go 1.24 (Goroutines, Channels, Ports &amp; Adapters)
+          </div>
+        </div>
+      </footer>
+
       <TechnicalSpecsOverlay isOpen={isSpecsOpen} onClose={() => setIsSpecsOpen(false)} />
-    </>
+    </div>
   )
 }
