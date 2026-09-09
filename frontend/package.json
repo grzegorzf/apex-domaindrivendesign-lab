@@ -6,7 +6,9 @@
     "dev": "next dev -p ${PORT:-3017}",
     "build": "next build",
     "build:pages": "STATIC_EXPORT=true next build",
-    "start": "next start -p ${PORT:-3017}"
+    "start": "next start -p ${PORT:-3017}",
+    "test": "node --test tests/*.test.mjs",
+    "lint": "node scripts/lint.mjs"
   },
   "dependencies": {
     "next": "^16.3.1",

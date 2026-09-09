@@ -24,6 +24,8 @@ All network bindings are dynamically provisioned via environment variables with 
 ## 3. Post-Task Verification Gate
 
 Before declaring complete:
-- [ ] **Build Frontend**: `pnpm build` in `frontend/` (zero errors).
+- [ ] **Run Frontend Domain Tests**: `npm test` in `frontend/` (100% test pass).
+- [ ] **Run Automated Code Smell & Lint Audit**: `npm run lint` in `frontend/` (zero issues).
+- [ ] **Typecheck & Build Frontend**: `pnpm build` in `frontend/` (zero errors).
 - [ ] **Build Static Pages**: `pnpm run build:pages` in `frontend/` (zero errors).
 - [ ] **Docker Compose Validation**: `docker compose config` passes with zero schema or volume warnings.
