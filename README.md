@@ -143,13 +143,35 @@ pnpm run build:pages
 
 ---
 
+## 🧪 Testing & Verification Suite
+
+The domain model and strategic layers are guarded by automated unit tests and code smell analysis:
+
+```bash
+cd frontend
+
+# 1. Run domain unit test suite (Value Object immutability, Aggregate Root invariants, ACL translation)
+npm test
+
+# 2. Run automated code smell & hygiene audit
+npm run lint
+
+# 3. Typecheck and build Next.js application
+pnpm build
+
+# 4. Generate static SPA bundle for GitHub / GitLab Pages
+pnpm run build:pages
+```
+
+---
+
 ## 🧪 CI / CD Pipelines
 
 - **GitHub Actions**:
-  - `.github/workflows/ci.yml`: Automated TypeScript typecheck and standalone Next.js 16 build.
+  - `.github/workflows/ci.yml`: Unit tests (`npm test`), code smell audit (`npm run lint`), TypeScript typecheck, and standalone Next.js 16 build.
   - `.github/workflows/deploy-pages.yml`: Automated static export deployment to GitHub Pages.
 - **GitLab CI**:
-  - `.gitlab-ci.yml`: Automated typechecking and Docker build container verification.
+  - `.gitlab-ci.yml`: Unit tests, automated typechecking, and Docker build container verification.
 
 ---
 

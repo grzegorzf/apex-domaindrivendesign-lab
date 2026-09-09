@@ -107,3 +107,19 @@ Every studio includes an instant, synchronized code view switchable via the head
 - **Docker Compose:** Parameterized port binding `${PORT:-3017}:${PORT:-3017}`, standalone Next.js server, `env_file: [ .env ]`.
 - **Start Script:** `./start.sh` supports background execution, attached streaming (`-f`), and native host development (`--local`).
 - **Static Export:** `next.config.ts` configured with `output: 'export'` for `build:pages` deploying directly to GitHub / GitLab Pages.
+
+---
+
+## 6. Automated Testing & Verification Architecture
+
+- **Domain Model Unit Test Suite (`tests/domain.test.mjs`)**:
+  - Executes directly via Node 22 native test runner (`node --test`) without external testing dependencies.
+  - Tests Value Object immutability: Verifies `Object.isFrozen` structural invariants and monetary precision rounding.
+  - Tests Currency Boundary Guards: Guarantees that arithmetic across disparate currency codes throws domain invariant violation exceptions.
+  - Tests Aggregate Root Invariant Boundaries: Verifies state transition consistency and event generation rules for Orders.
+  - Tests Anti-Corruption Layer (ACL): Asserts safe boundary mapping between legacy schemas and domain entities.
+- **Static Code Hygiene Scanner (`scripts/lint.mjs`)**:
+  - Inspects TypeScript and React domain studio code for debugging statements (`debugger`, `alert()`), deprecated primer phrasing, and unhandled exceptions.
+- **Continuous Integration**:
+  - Enforced via GitHub Actions (`ci.yml`) and GitLab CI (`.gitlab-ci.yml`) ensuring unit tests, linting, and Next.js static export execute with zero warnings.
+
