@@ -9,7 +9,6 @@ This project is the Domain-Driven Design curriculum and interactive architecture
 - [ ] **Check Environment**: Sourced from root or local `.env`. Never hardcode API keys or secrets.
 - [ ] **Verify Design Consistency**: UI components must align with the `portfolio-playground` design system (`design-tokens.css`), featuring Daylight/Midnight themes, `--orbit` custom properties, and Technical Specs overlays.
 - [ ] **Ports Consistency**: Frontend Studio on `3017` (configurable via `PORT` in `.env`).
-- [ ] **Startup Compliance**: Never use DAEMON mode (`-d`) in `./start.sh` scripts! Always run foreground logs.
 
 ---
 
