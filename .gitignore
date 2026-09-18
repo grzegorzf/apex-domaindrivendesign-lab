@@ -27,3 +27,6 @@ Thumbs.db
 .idea/
 .vscode/
 
+
+# Agent Specifications & Guides
+apex_visual_system.md

@@ -192,13 +192,13 @@ body {
   width: 40px;
   height: 40px;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, var(--cyan), var(--violet));
+  background: linear-gradient(135deg, #8b5cf6, #c7ff5e);
   display: grid;
   place-items: center;
   font-weight: 800;
   font-size: var(--text-sm);
-  color: #ffffff;
-  box-shadow: 0 4px 15px var(--cyan-glow);
+  color: #0d0c10;
+  box-shadow: 0 4px 18px var(--violet-glow);
   letter-spacing: -0.04em;
   flex-shrink: 0;
 }
@@ -242,20 +242,20 @@ body {
   padding: 0.4rem 0.8rem;
   border-radius: var(--radius-full);
   cursor: pointer;
-  transition: all var(--duration-fast);
+  transition: all var(--duration-fast) var(--apex-ease-out);
 }
 
 .control-pill:hover {
   background: var(--surface-hover);
   color: var(--text);
-  border-color: var(--border-accent);
+  border-color: var(--border-bright);
 }
 
 .control-pill.active-lang {
-  background: rgba(56, 189, 248, 0.12);
-  color: var(--cyan);
-  border-color: var(--cyan-border);
-  box-shadow: 0 0 12px var(--cyan-glow);
+  background: rgba(139, 92, 246, 0.16);
+  color: var(--text);
+  border-color: var(--violet);
+  box-shadow: 0 0 14px var(--violet-glow);
 }
 
 .indicator-dot {
@@ -337,10 +337,10 @@ body {
   font-family: var(--font-body);
   font-size: var(--text-xs);
   font-weight: 600;
-  padding: 0.42rem 0.95rem;
+  padding: 0.45rem 1rem;
   border-radius: var(--radius-full);
   cursor: pointer;
-  transition: all var(--duration-fast);
+  transition: all var(--duration-fast) var(--apex-ease-out);
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
@@ -350,15 +350,15 @@ body {
 
 .nav-tab:hover {
   color: var(--text);
-  border-color: var(--border-accent);
+  border-color: var(--border-bright);
   background: var(--surface-hover);
 }
 
 .nav-tab.active {
   background: var(--surface-elevated);
-  border-color: var(--cyan-border);
-  color: var(--cyan);
-  box-shadow: 0 0 12px var(--cyan-glow);
+  border-color: var(--violet);
+  color: var(--text);
+  box-shadow: 0 0 14px var(--violet-glow);
 }
 
 /* ─── Main Content & Studio Viewport ─── */
@@ -497,21 +497,22 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, var(--cyan), #0284c7);
+  background: linear-gradient(135deg, var(--violet), #6d28d9);
   color: #ffffff;
-  font-weight: 600;
+  font-weight: 700;
   font-size: var(--text-xs);
-  padding: 0.6rem 1.2rem;
-  border-radius: var(--radius-md);
-  border: none;
+  padding: 0.55rem 1.15rem;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   cursor: pointer;
-  transition: all var(--duration-fast);
-  box-shadow: 0 4px 14px var(--cyan-glow);
+  transition: all var(--duration-fast) var(--apex-ease-out);
+  box-shadow: 0 4px 14px var(--violet-glow);
 }
 
 .btn-primary:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
+  filter: brightness(1.12);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--violet-glow);
 }
 
 .btn-secondary {
@@ -522,16 +523,189 @@ body {
   color: var(--text);
   font-weight: 600;
   font-size: var(--text-xs);
-  padding: 0.6rem 1.2rem;
-  border-radius: var(--radius-md);
+  padding: 0.55rem 1.15rem;
+  border-radius: var(--radius-full);
   border: 1px solid var(--border);
   cursor: pointer;
-  transition: all var(--duration-fast);
+  transition: all var(--duration-fast) var(--apex-ease-out);
 }
 
 .btn-secondary:hover {
   background: var(--surface-hover);
-  border-color: var(--border-accent);
+  border-color: var(--border-bright);
+  transform: translateY(-1px);
+}
+
+/* ─── Educational Lab Badge (apex_visual_system.md Section 4.1) ─── */
+.lab-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  background: rgba(20, 19, 25, 0.9);
+  border: 1px solid rgba(199, 255, 94, 0.45);
+  border-radius: 99px;
+  font: 700 0.62rem var(--font-mono);
+  color: var(--lime);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ─── Educational Callout Box (apex_visual_system.md Section 4.3) ─── */
+.dialog-educational-box {
+  margin: 1.25rem 0;
+  padding: 1.1rem 1.3rem;
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.28);
+  border-left: 4px solid var(--violet);
+  border-radius: var(--radius-sm);
+}
+
+.dialog-educational-title {
+  display: block;
+  font: 750 0.66rem var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--violet);
+  margin-bottom: 0.45rem;
+}
+
+.dialog-educational-box p {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+/* ─── Scenario / Checklist Items with '↳' (Section 4.4) ─── */
+.scenario-list {
+  list-style: none;
+  margin: 1rem 0;
+  padding: 0;
+}
+
+.scenario-item {
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: baseline;
+  line-height: 1.55;
+}
+
+.scenario-item::before {
+  content: "↳";
+  margin-right: 0.6rem;
+  color: var(--violet);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ─── Telemetry Meter Widget (apex_visual_system.md Section 6.1) ─── */
+.telemetry-meter {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-main);
+}
+
+.meter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.meter-label {
+  font: 650 0.65rem var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.meter-value {
+  font: 750 0.78rem var(--font-mono);
+  color: var(--lime);
+}
+
+.meter-track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  background: var(--lime);
+  transition: width 0.3s var(--apex-ease-out);
+}
+
+/* ─── State Machine Status Pill (apex_visual_system.md Section 6.2) ─── */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font: 700 0.64rem var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.status-pill.leader,
+.status-pill.valid {
+  background: rgba(199, 255, 94, 0.12);
+  color: var(--lime);
+  border: 1px solid rgba(199, 255, 94, 0.4);
+}
+
+.status-pill.follower {
+  background: rgba(255, 255, 255, 0.04);
+  color: #a49fad;
+  border: 1px solid var(--border);
+}
+
+.status-pill.partitioned,
+.status-pill.violation {
+  background: rgba(244, 63, 94, 0.12);
+  color: var(--rose);
+  border: 1px solid rgba(244, 63, 94, 0.4);
+}
+
+/* ─── Editorial Typography Tokens ─── */
+.section-overline {
+  font: 750 0.68rem var(--font-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.editorial-title {
+  font-family: var(--font-heading);
+  font-weight: 750;
+  letter-spacing: var(--tracking-tighter);
+  line-height: 0.98;
+  color: var(--text);
+}
+
+.serif-accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--violet);
+}
+
+.hero-subtitle {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  color: var(--text-secondary);
+  line-height: 1.4;
 }
 
 /* ─── Badges ─── */
@@ -547,7 +721,7 @@ body {
 }
 
 .badge-lime {
-  background: rgba(163, 230, 53, 0.1);
+  background: rgba(199, 255, 94, 0.1);
   color: var(--lime);
   border: 1px solid var(--lime-border);
   font-size: var(--text-2xs);
@@ -558,9 +732,9 @@ body {
 }
 
 .badge-violet {
-  background: rgba(168, 85, 247, 0.1);
+  background: rgba(139, 92, 246, 0.12);
   color: var(--violet-light);
-  border: 1px solid rgba(168, 85, 247, 0.4);
+  border: 1px solid var(--violet-border);
   font-size: var(--text-2xs);
   font-family: var(--font-mono);
   font-weight: 700;
@@ -569,9 +743,9 @@ body {
 }
 
 .badge-rose {
-  background: rgba(251, 113, 133, 0.1);
+  background: rgba(244, 63, 94, 0.1);
   color: var(--rose);
-  border: 1px solid rgba(251, 113, 133, 0.4);
+  border: 1px solid rgba(244, 63, 94, 0.4);
   font-size: var(--text-2xs);
   font-family: var(--font-mono);
   font-weight: 700;
@@ -580,9 +754,9 @@ body {
 }
 
 .badge-amber {
-  background: rgba(251, 191, 36, 0.1);
+  background: rgba(245, 158, 11, 0.1);
   color: #fbbf24;
-  border: 1px solid rgba(251, 191, 36, 0.4);
+  border: 1px solid rgba(245, 158, 11, 0.4);
   font-size: var(--text-2xs);
   font-family: var(--font-mono);
   font-weight: 700;
@@ -595,13 +769,13 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: rgba(16, 185, 129, 0.1);
-  color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: rgba(199, 255, 94, 0.08);
+  color: var(--lime);
+  border: 1px solid rgba(199, 255, 94, 0.35);
   font-size: 0.65rem;
   font-weight: 700;
   font-family: var(--font-mono);
-  padding: 2px 6px;
+  padding: 2px 8px;
   border-radius: var(--radius-full);
 }
 
@@ -609,14 +783,15 @@ body {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #10b981;
+  background: var(--lime);
+  box-shadow: 0 0 8px var(--lime);
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(199, 255, 94, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(199, 255, 94, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(199, 255, 94, 0); }
 }
 
 /* ─── Footer ─── */
@@ -637,6 +812,139 @@ body {
   font-size: var(--text-xs);
   color: var(--text-tertiary);
   text-align: center;
+}
+
+/* ─── Apex Card Visual & Copy Split (apex_visual_system.md Section 4.2) ─── */
+.apex-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.95fr) minmax(0, 1.05fr);
+  transition: transform 0.35s var(--apex-ease-out), border-color 0.3s ease, box-shadow 0.35s ease;
+  cursor: pointer;
+  box-shadow: var(--shadow-main);
+}
+
+.apex-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--border-bright);
+}
+
+.apex-card-art {
+  background: #0d0c10;
+  position: relative;
+  min-height: 22rem;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--border-subtle);
+}
+
+.apex-card-copy {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.5rem, 2.5vw, 2.4rem);
+  justify-content: space-between;
+}
+
+/* ─── Split Drawer Overlay Modal (Reference Image 4) ─── */
+.split-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(13, 12, 16, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  justify-content: flex-end;
+  animation: fadeIn 220ms var(--apex-ease-out);
+}
+
+.split-drawer-container {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.95fr) minmax(440px, 1.35fr);
+  width: 100%;
+  max-width: 1120px;
+  height: 100%;
+  background: var(--apex-canvas);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.85);
+  border-left: 1px solid var(--apex-line);
+  overflow: hidden;
+  position: relative;
+}
+
+.split-drawer-left {
+  background: #0d0c10;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  border-right: 1px solid var(--apex-line);
+  overflow: hidden;
+}
+
+.split-drawer-right {
+  /* Warm Parchment Editorial Sheet */
+  background: var(--apex-paper);
+  color: var(--apex-ink);
+  padding: clamp(2rem, 3.5vw, 3.5rem);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+}
+
+.drawer-close-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(19, 18, 23, 0.15);
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--apex-ink);
+  display: grid;
+  place-items: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--apex-ease-out);
+  z-index: 10;
+}
+
+.drawer-close-btn:hover {
+  background: #ffffff;
+  transform: scale(1.08);
+  border-color: rgba(19, 18, 23, 0.35);
+}
+
+.split-drawer-right .section-overline {
+  color: #726b7c;
+}
+
+.split-drawer-right .dialog-educational-box {
+  background: #ece8f8;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-left: 4px solid #8b5cf6;
+}
+
+.split-drawer-right .dialog-educational-box p {
+  color: #2e2a36;
+}
+
+.split-drawer-right .scenario-item {
+  border-bottom: 1px solid rgba(19, 18, 23, 0.08);
+  color: #3b3644;
+}
+
+.split-drawer-right .scenario-item::before {
+  color: #8b5cf6;
 }
 
 /* ─── Responsive Queries & Mobile Optimization (Baseline 2026) ─── */
@@ -673,6 +981,21 @@ body {
   }
   .site-footer {
     padding: var(--space-6) 1rem;
+  }
+  .split-drawer-container {
+    grid-template-columns: 1fr;
+    max-width: 100vw;
+  }
+  .split-drawer-left {
+    display: none;
+  }
+  .apex-card {
+    grid-template-columns: 1fr;
+  }
+  .apex-card-art {
+    min-height: 16rem;
+    border-right: none;
+    border-bottom: 1px solid var(--border-subtle);
   }
 }
 

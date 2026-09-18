@@ -15,6 +15,7 @@ import HexagonalArchitectureStudio from '@/components/HexagonalArchitectureStudi
 import SagasProcessManagerStudio from '@/components/SagasProcessManagerStudio'
 import DddCurriculumBlueprint from '@/components/DddCurriculumBlueprint'
 import TechnicalSpecsOverlay from '@/components/TechnicalSpecsOverlay'
+import ApexDddVisualArt from '@/components/ApexDddVisualArt'
 
 type DddTab =
   | 'ubiquitous'
@@ -184,6 +185,69 @@ export default function DomainDrivenDesignLabPage() {
           </div>
         </div>
       </header>
+
+      {/* Editorial Lab Hero Banner (Ref. Image 2 & apex_visual_system.md) */}
+      <section className="lab-hero-banner" style={{ borderBottom: '1px solid var(--border-subtle)', background: 'var(--bg)' }}>
+        <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: 'clamp(1.25rem, 3vw, 2.5rem) clamp(1.25rem, 3.5vw, 3rem)' }}>
+          <div className="apex-card" style={{ cursor: 'default' }}>
+            {/* Visual Art Canvas (Left) */}
+            <div className="apex-card-art">
+              <ApexDddVisualArt showBadge={true} interactive={true} />
+            </div>
+
+            {/* Technical Copy & Telemetry HUD (Right) */}
+            <div className="apex-card-copy">
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '8px' }}>
+                  <span className="section-overline">INTERACTIVE SYSTEMS &amp; ENGINEERING LABS</span>
+                  <span className="badge-violet">ARCHITECTURE &amp; SYSTEMS</span>
+                </div>
+
+                <h1 className="editorial-title" style={{ fontSize: 'clamp(1.9rem, 3.5vw, 3.1rem)', marginBottom: '0.5rem' }}>
+                  Apex Domain-Driven <span className="serif-accent">Design Lab</span>
+                </h1>
+
+                <div className="hero-subtitle" style={{ marginBottom: '1rem' }}>
+                  Tactical &amp; strategic DDD simulation workbench
+                </div>
+
+                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.65, marginBottom: '1.25rem' }}>
+                  Enterprise architectural laboratory demystifying Domain-Driven Design—turning abstract invariants, aggregate boundaries, transactional outboxes, event-sourcing streams, and distributed sagas into tangible, interactive telemetry with real-time Java 26+ and Go 1.24 polyglot engines.
+                </p>
+
+                {/* Tech Tags */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '1.5rem' }}>
+                  <span className="mono-badge">TypeScript</span>
+                  <span className="mono-badge">React 19</span>
+                  <span className="mono-badge">Domain-Driven Design</span>
+                  <span className="mono-badge">Event Sourcing</span>
+                  <span className="mono-badge">Hexagonal Architecture</span>
+                  <span className="mono-badge">Compensating Sagas</span>
+                </div>
+              </div>
+
+              {/* Action and Telemetry Strip */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span className="live-badge"><span className="live-dot" /> 10 ACTIVE STUDIOS</span>
+                  <span style={{ fontSize: 'var(--text-2xs)', fontFamily: 'var(--font-mono)', color: 'var(--text-tertiary)' }}>
+                    ENGINE: {language === 'java' ? 'JAVA 26+' : 'GO 1.24'}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  className="btn-primary"
+                  onClick={() => setIsSpecsOpen(true)}
+                  style={{ padding: '0.45rem 1rem', fontSize: 'var(--text-2xs)' }}
+                >
+                  Explore Educational Lab ↗
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Navigation Tabs Sub-Bar with desktop wheel + chevron + touch scrolling */}
       <div className="nav-container">

@@ -16,11 +16,13 @@
 }
 
 :root {
-  --font-heading: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
-  --font-body: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+  /* Typography Stacks */
+  --font-heading: "Inter", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-body: "Inter", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
+  /* Typography Scales */
   --text-2xs: 0.6875rem;
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
@@ -32,15 +34,17 @@
   --text-4xl: 2.25rem;
   --text-5xl: 3rem;
 
-  --leading-tight: 1.15;
-  --leading-snug: 1.35;
+  --leading-tight: 1.12;
+  --leading-snug: 1.32;
   --leading-normal: 1.6;
   --leading-relaxed: 1.75;
 
+  --tracking-tighter: -0.055em;
   --tracking-tight: -0.035em;
   --tracking-normal: 0;
-  --tracking-wide: 0.05em;
-  --tracking-wider: 0.12em;
+  --tracking-wide: 0.06em;
+  --tracking-wider: 0.14em;
+  --tracking-widest: 0.18em;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -54,54 +58,108 @@
   --space-16: 4rem;
 
   --radius-xs: 4px;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
   --radius-full: 9999px;
 
+  /* Motion & Easing — Physical Spring Physics */
   --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
-  --duration-fast: 150ms;
-  --duration-normal: 250ms;
+  --apex-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 180ms;
+  --duration-normal: 280ms;
   --duration-slow: 400ms;
+  --apex-transition-fast: 0.18s var(--apex-ease-out);
+  --apex-transition-smooth: 0.35s var(--apex-ease-out);
 
   --nav-height: 4.5rem;
   --container-max: 1440px;
 
-  /* Default Midnight Tokens */
+  /* Core Apex Visual Tokens (Dark Carbon Foundation) */
   color-scheme: dark;
-  --bg: #06080e;
-  --bg-subtle: #0b101c;
-  --surface: #101726;
-  --surface-elevated: #162035;
-  --surface-hover: #1c2a47;
-  --border: #223354;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-accent: rgba(56, 189, 248, 0.4);
+  --apex-canvas: #0d0c10;
+  --apex-surface: #141318;
+  --apex-surface-card: #1a191f;
+  --apex-surface-elevated: #222029;
+  --apex-surface-overlay: rgba(13, 12, 16, 0.9);
 
-  --text: #f3f6fc;
-  --text-secondary: #94a3b8;
-  --text-tertiary: #64748b;
+  /* Hairline Borders */
+  --apex-line: #34313a;
+  --apex-line-subtle: rgba(255, 255, 255, 0.08);
+  --apex-line-bright: rgba(255, 255, 255, 0.25);
+  --apex-line-active: #ffffff;
 
-  --panel-bg: rgba(11, 16, 28, 0.88);
-  --shadow-main: 0 20px 50px rgba(0, 0, 0, 0.65);
+  /* Typography Colors */
+  --apex-text-primary: #ffffff;
+  --apex-text-secondary: #d4ced9;
+  --apex-text-muted: #958f9c;
+  --apex-text-dim: #68626b;
 
-  --cyan: #38bdf8;
-  --cyan-glow: rgba(56, 189, 248, 0.18);
-  --cyan-border: rgba(56, 189, 248, 0.45);
+  /* Accent & Telemetry Colors */
+  --apex-lime: #c7ff5e;
+  --apex-lime-subtle: rgba(199, 255, 94, 0.12);
+  --apex-lime-glow: rgba(199, 255, 94, 0.25);
+  --apex-lime-border: rgba(199, 255, 94, 0.45);
 
-  --lime: #a3e635;
-  --lime-glow: rgba(163, 230, 53, 0.16);
-  --lime-border: rgba(163, 230, 53, 0.4);
+  --apex-violet: #8b5cf6;
+  --apex-violet-light: #a78bfa;
+  --apex-violet-subtle: rgba(139, 92, 246, 0.12);
+  --apex-violet-glow: rgba(139, 92, 246, 0.25);
+  --apex-violet-border: rgba(139, 92, 246, 0.45);
 
-  --violet: #a855f7;
-  --violet-light: #c084fc;
-  --violet-glow: rgba(168, 85, 247, 0.16);
+  --apex-amber: #f59e0b;
+  --apex-amber-glow: rgba(245, 158, 11, 0.2);
+  --apex-cyan: #38bdf8;
+  --apex-cyan-glow: rgba(56, 189, 248, 0.2);
+  --apex-cyan-border: rgba(56, 189, 248, 0.45);
+  --apex-rose: #f43f5e;
+  --apex-rose-glow: rgba(244, 63, 94, 0.2);
 
-  --amber: #fbbf24;
-  --amber-glow: rgba(251, 191, 36, 0.16);
-  --rose: #fb7185;
-  --rose-glow: rgba(251, 113, 133, 0.16);
+  /* Warm Parchment Paper & Editorial Tokens */
+  --apex-paper: #f1efe8;
+  --apex-paper-muted: #e7e4dc;
+  --apex-paper-subtle: #faf8f5;
+  --apex-ink: #131217;
+  --apex-serif-accent: "Instrument Serif", Georgia, serif;
+
+  /* Mappings to Universal Theme Variables */
+  --bg: var(--apex-canvas);
+  --bg-subtle: var(--apex-surface);
+  --surface: var(--apex-surface-card);
+  --surface-elevated: var(--apex-surface-elevated);
+  --surface-hover: #26242e;
+  --border: var(--apex-line);
+  --border-subtle: var(--apex-line-subtle);
+  --border-accent: rgba(139, 92, 246, 0.45);
+  --border-bright: var(--apex-line-bright);
+
+  --text: var(--apex-text-primary);
+  --text-secondary: var(--apex-text-secondary);
+  --text-tertiary: var(--apex-text-muted);
+  --text-dim: var(--apex-text-dim);
+
+  --panel-bg: var(--apex-surface-overlay);
+  --shadow-main: 0 20px 50px rgba(0, 0, 0, 0.7);
+
+  --lime: var(--apex-lime);
+  --lime-subtle: var(--apex-lime-subtle);
+  --lime-glow: var(--apex-lime-glow);
+  --lime-border: var(--apex-lime-border);
+
+  --violet: var(--apex-violet);
+  --violet-light: var(--apex-violet-light);
+  --violet-subtle: var(--apex-violet-subtle);
+  --violet-glow: var(--apex-violet-glow);
+  --violet-border: var(--apex-violet-border);
+
+  --amber: var(--apex-amber);
+  --amber-glow: var(--apex-amber-glow);
+  --cyan: var(--apex-cyan);
+  --cyan-glow: var(--apex-cyan-glow);
+  --cyan-border: var(--apex-cyan-border);
+  --rose: var(--apex-rose);
+  --rose-glow: var(--apex-rose-glow);
 
   /* OKLCH Gamut Accents */
   --oklch-cyan: oklch(78% 0.15 220);
@@ -113,75 +171,80 @@
 :root.theme-midnight,
 body.theme-midnight {
   color-scheme: dark;
-  --bg: #06080e;
-  --bg-subtle: #0b101c;
-  --surface: #101726;
-  --surface-elevated: #162035;
-  --surface-hover: #1c2a47;
-  --border: #223354;
+  --bg: #0d0c10;
+  --bg-subtle: #141318;
+  --surface: #1a191f;
+  --surface-elevated: #222029;
+  --surface-hover: #282531;
+  --border: #34313a;
   --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-accent: rgba(56, 189, 248, 0.4);
+  --border-accent: rgba(139, 92, 246, 0.45);
+  --border-bright: rgba(255, 255, 255, 0.25);
 
-  --text: #f3f6fc;
-  --text-secondary: #94a3b8;
-  --text-tertiary: #64748b;
+  --text: #ffffff;
+  --text-secondary: #d4ced9;
+  --text-tertiary: #958f9c;
+  --text-dim: #68626b;
 
-  --panel-bg: rgba(11, 16, 28, 0.88);
-  --shadow-main: 0 20px 50px rgba(0, 0, 0, 0.65);
+  --panel-bg: rgba(13, 12, 16, 0.9);
+  --shadow-main: 0 20px 50px rgba(0, 0, 0, 0.7);
 
+  --lime: #c7ff5e;
+  --lime-glow: rgba(199, 255, 94, 0.25);
+  --lime-border: rgba(199, 255, 94, 0.45);
+
+  --violet: #8b5cf6;
+  --violet-light: #a78bfa;
+  --violet-glow: rgba(139, 92, 246, 0.25);
+  --violet-border: rgba(139, 92, 246, 0.45);
+
+  --amber: #f59e0b;
+  --amber-glow: rgba(245, 158, 11, 0.2);
   --cyan: #38bdf8;
-  --cyan-glow: rgba(56, 189, 248, 0.18);
+  --cyan-glow: rgba(56, 189, 248, 0.2);
   --cyan-border: rgba(56, 189, 248, 0.45);
-
-  --lime: #a3e635;
-  --lime-glow: rgba(163, 230, 53, 0.16);
-  --lime-border: rgba(163, 230, 53, 0.4);
-
-  --violet: #a855f7;
-  --violet-light: #c084fc;
-  --violet-glow: rgba(168, 85, 247, 0.16);
-
-  --amber: #fbbf24;
-  --amber-glow: rgba(251, 191, 36, 0.16);
-  --rose: #fb7185;
-  --rose-glow: rgba(251, 113, 133, 0.16);
+  --rose: #f43f5e;
+  --rose-glow: rgba(244, 63, 94, 0.2);
 }
 
 :root.theme-daylight,
 body.theme-daylight {
   color-scheme: light;
-  --bg: #f8fafc;
-  --bg-subtle: #f1f5f9;
+  /* Warm Parchment Editorial Paper Foundation */
+  --bg: #f4f2eb;
+  --bg-subtle: #eae7dd;
   --surface: #ffffff;
-  --surface-elevated: #ffffff;
-  --surface-hover: #f1f5f9;
-  --border: #cbd5e1;
-  --border-subtle: rgba(0, 0, 0, 0.06);
-  --border-accent: rgba(14, 165, 233, 0.45);
+  --surface-elevated: #faf8f5;
+  --surface-hover: #f0ede4;
+  --border: #dcd8cf;
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-accent: rgba(124, 58, 237, 0.45);
+  --border-bright: rgba(0, 0, 0, 0.2);
 
-  --text: #0f172a;
-  --text-secondary: #475569;
-  --text-tertiary: #94a3b8;
+  --text: #131217;
+  --text-secondary: #4a4553;
+  --text-tertiary: #6e6778;
+  --text-dim: #928a9c;
 
-  --panel-bg: rgba(255, 255, 255, 0.92);
-  --shadow-main: 0 20px 40px rgba(0, 0, 0, 0.08);
+  --panel-bg: rgba(244, 242, 235, 0.94);
+  --shadow-main: 0 20px 45px rgba(0, 0, 0, 0.08);
 
+  --lime: #4d7c0f;
+  --lime-glow: rgba(77, 124, 15, 0.15);
+  --lime-border: rgba(77, 124, 15, 0.4);
+
+  --violet: #7c3aed;
+  --violet-light: #6d28d9;
+  --violet-glow: rgba(124, 58, 237, 0.15);
+  --violet-border: rgba(124, 58, 237, 0.4);
+
+  --amber: #b45309;
+  --amber-glow: rgba(180, 83, 9, 0.15);
   --cyan: #0284c7;
-  --cyan-glow: rgba(2, 132, 199, 0.12);
+  --cyan-glow: rgba(2, 132, 199, 0.15);
   --cyan-border: rgba(2, 132, 199, 0.35);
-
-  --lime: #65a30d;
-  --lime-glow: rgba(101, 163, 13, 0.12);
-  --lime-border: rgba(101, 163, 13, 0.35);
-
-  --violet: #9333ea;
-  --violet-light: #7e22ce;
-  --violet-glow: rgba(147, 51, 234, 0.12);
-
-  --amber: #d97706;
-  --amber-glow: rgba(217, 119, 6, 0.12);
   --rose: #e11d48;
-  --rose-glow: rgba(225, 29, 72, 0.12);
+  --rose-glow: rgba(225, 29, 72, 0.15);
 }
 
 @keyframes orbitSpin {
